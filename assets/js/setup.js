@@ -2303,41 +2303,284 @@ function returnToEdit() {
  * ====================================== */
 
 
-function handleConfirmCreate() {
+async function handleConfirmCreate() {
 
 
   if (
-    !finalAgreement.checked
+    isSubmitting
   ) {
-
-
-    showToast(
-      '請先確認資料內容'
-    );
-
 
     return;
 
   }
 
 
-  /*
-   * Phase 03-D
-   *
-   * 這裡才會正式：
-   *
-   * 1. 處理照片
-   * 2. POST Apps Script
-   * 3. action=create
-   * 4. 建立 Game ID
-   * 5. 建立 Mission 密碼
-   * 6. 寫入 Google Sheet
-   */
+  if (
+    !finalAgreement.checked
+  ) {
+
+    showToast(
+      '請先確認資料內容'
+    );
+
+    return;
+
+  }
 
 
-  showToast(
-    '最終確認完成 ✓ 下一階段正式建立 Birthday Mission'
+  if (
+    !photoInput.files.length
+  ) {
+
+    showToast(
+      '生日卡照片已遺失，請返回重新選擇'
+    );
+
+    return;
+
+  }
+
+
+  isSubmitting =
+    true;
+
+
+  setCreateLoading(
+    true
   );
+
+
+  try {
+
+
+    /* ===============================
+       COLLECT
+       =============================== */
+
+
+    const draft =
+      collectDraftData();
+
+
+    const missionCount =
+      Number(
+        draft.missionCount
+      );
+
+
+    if (
+      missionCount < 1 ||
+      missionCount > 4
+    ) {
+
+      throw new Error(
+        'Mission 數量異常'
+      );
+
+    }
+
+
+    /*
+     * 非常重要：
+     *
+     * 客戶選 2 關，
+     * 就只傳前兩關。
+     */
+
+
+    const activeMissions =
+      draft.missions.slice(
+        0,
+        missionCount
+      );
+
+
+    /* ===============================
+       PHOTO
+       =============================== */
+
+
+    const photo =
+      await preparePhotoForUpload(
+        photoInput.files[0]
+      );
+
+
+    /* ===============================
+       PAYLOAD
+       =============================== */
+
+
+    const payload = {
+
+      action:
+        'create',
+
+      orderNo:
+        draft.orderNo,
+
+      nickname:
+        draft.nickname,
+
+      birthdayDate:
+        draft.birthdayDate,
+
+      unlockTime:
+        draft.unlockTime,
+
+      rescueTime:
+        draft.rescueTime,
+
+      gameMode:
+        draft.gameMode,
+
+      giftLocation:
+        draft.giftLocation,
+
+      completionBlessing:
+        draft.completionBlessing,
+
+      missions:
+        activeMissions,
+
+      card: {
+
+        title:
+          draft.card.title,
+
+        subtitle:
+          draft.card.subtitle,
+
+        message:
+          draft.card.message,
+
+        signature:
+          draft.card.signature,
+
+        template:
+          draft.card.template,
+
+        photo,
+
+      },
+
+    };
+
+
+    /* ===============================
+       POST
+       =============================== */
+
+
+    const response =
+      await fetch(
+
+        BM_CONFIG.API_URL,
+
+        {
+
+          method:
+            'POST',
+
+          redirect:
+            'follow',
+
+          headers: {
+
+            'Content-Type':
+              'text/plain;charset=utf-8',
+
+          },
+
+          body:
+            JSON.stringify(
+              payload
+            ),
+
+        }
+
+      );
+
+
+    if (
+      !response.ok
+    ) {
+
+      throw new Error(
+        `HTTP ${response.status}`
+      );
+
+    }
+
+
+    const result =
+      await response.json();
+
+
+    if (
+      result.ok !== true
+    ) {
+
+      throw new Error(
+        result.error ||
+        'Birthday Mission 建立失敗'
+      );
+
+    }
+
+
+    if (
+      result.status !==
+      'CREATED'
+    ) {
+
+      throw new Error(
+        '系統回傳狀態異常'
+      );
+
+    }
+
+
+    /* ===============================
+       SUCCESS
+       =============================== */
+
+
+    localStorage.removeItem(
+      BM_SETUP.STORAGE_KEY
+    );
+
+
+    showCreationSuccess(
+      result
+    );
+
+
+  }
+
+  catch (error) {
+
+
+    console.error(
+      error
+    );
+
+
+    showToast(
+      error?.message ||
+      '建立失敗，請稍後再試'
+    );
+
+
+    setCreateLoading(
+      false
+    );
+
+
+    isSubmitting =
+      false;
+
+  }
 
 }
 
@@ -2455,5 +2698,30 @@ function escapeHtml(
       /'/g,
       '&#039;'
     );
+
+}
+
+function setCreateLoading(
+  loading
+) {
+
+
+  confirmCreateBtn.disabled =
+    loading ||
+    !finalAgreement.checked;
+
+
+  editDataBtn.disabled =
+    loading;
+
+
+  finalAgreement.disabled =
+    loading;
+
+
+  confirmCreateBtn.textContent =
+    loading
+      ? 'Birthday Mission 建立中...'
+      : '確認建立 Birthday Mission';
 
 }
