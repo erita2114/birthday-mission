@@ -100,6 +100,59 @@ const uploadEmpty =
     'uploadEmpty'
   );
 
+const confirmationPage =
+  document.getElementById(
+    'confirmationPage'
+  );
+
+
+const confirmBasic =
+  document.getElementById(
+    'confirmBasic'
+  );
+
+
+const confirmMissions =
+  document.getElementById(
+    'confirmMissions'
+  );
+
+
+const confirmMissionSubtitle =
+  document.getElementById(
+    'confirmMissionSubtitle'
+  );
+
+
+const confirmGift =
+  document.getElementById(
+    'confirmGift'
+  );
+
+
+const confirmCard =
+  document.getElementById(
+    'confirmCard'
+  );
+
+
+const editDataBtn =
+  document.getElementById(
+    'editDataBtn'
+  );
+
+
+const confirmCreateBtn =
+  document.getElementById(
+    'confirmCreateBtn'
+  );
+
+
+const finalAgreement =
+  document.getElementById(
+    'finalAgreement'
+  );
+
 
 /* ======================================
  * INIT
