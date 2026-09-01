@@ -14,6 +14,10 @@
   --cream-2: #d8c8ae;
   --gold: #cfb784;
   --gold-soft: rgba(207,183,132,.14);
+  --mode-accent: #cfb784;
+  --mode-accent-2: #eee4d2;
+  --mode-soft: rgba(207,183,132,.14);
+  --mode-glow: rgba(207,183,132,.20);
   --danger: #d9a4a0;
   --success: #b9d3b7;
   --radius-xl: 28px;
@@ -1434,6 +1438,211 @@ button:disabled { opacity: .34; cursor: not-allowed; }
     animation: none !important;
   }
 }
+
+
+
+/* =========================================================
+   PHASE 08-03 | GAME MODE PERSONALITY
+   ========================================================= */
+
+body[data-game-mode="heart"] {
+  --mode-accent: #d6b3a0;
+  --mode-accent-2: #f2dfd1;
+  --mode-soft: rgba(214,179,160,.14);
+  --mode-glow: rgba(214,179,160,.20);
+  background:
+    radial-gradient(900px 500px at 50% -70px, rgba(191,142,121,.15), transparent 58%),
+    radial-gradient(650px 540px at 110% 28%, rgba(137,96,91,.07), transparent 60%),
+    linear-gradient(180deg, #12100f 0%, #0c0b0a 35%, #070706 100%);
+}
+
+body[data-game-mode="roast"] {
+  --mode-accent: #d4a85b;
+  --mode-accent-2: #f0d39a;
+  --mode-soft: rgba(212,168,91,.14);
+  --mode-glow: rgba(212,168,91,.24);
+  background:
+    radial-gradient(900px 500px at 50% -70px, rgba(181,124,47,.16), transparent 58%),
+    radial-gradient(650px 520px at 105% 24%, rgba(157,95,38,.075), transparent 60%),
+    linear-gradient(180deg, #12100c 0%, #0d0b08 35%, #070706 100%);
+}
+
+body[data-game-mode="hell"] {
+  --mode-accent: #c96f67;
+  --mode-accent-2: #e8a49d;
+  --mode-soft: rgba(201,111,103,.13);
+  --mode-glow: rgba(201,111,103,.23);
+  background:
+    radial-gradient(900px 500px at 50% -70px, rgba(146,48,44,.18), transparent 58%),
+    radial-gradient(650px 540px at 110% 25%, rgba(121,35,35,.09), transparent 60%),
+    linear-gradient(180deg, #120d0c 0%, #0d0909 34%, #070606 100%);
+}
+
+.mode-badge {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0,1fr);
+  gap: 16px;
+  align-items: center;
+  margin: -20px 0 32px;
+  padding: 13px 15px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--mode-accent) 30%, transparent);
+  border-radius: 16px;
+  background:
+    linear-gradient(135deg, var(--mode-soft), rgba(255,255,255,.012));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.02);
+}
+.mode-badge::after {
+  content: "";
+  position: absolute;
+  right: -30px;
+  top: 50%;
+  width: 90px;
+  height: 90px;
+  border: 1px solid color-mix(in srgb, var(--mode-accent) 16%, transparent);
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+.mode-badge > div {
+  min-width: 104px;
+}
+.mode-badge span,
+.mode-badge strong,
+.mode-badge small {
+  position: relative;
+  z-index: 1;
+}
+.mode-badge span {
+  display: block;
+  color: var(--mode-accent);
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: .18em;
+}
+.mode-badge strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--mode-accent-2);
+  font-size: 12px;
+  letter-spacing: .03em;
+}
+.mode-badge small {
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+body[data-game-mode] .access-granted {
+  border-color: color-mix(in srgb, var(--mode-accent) 46%, transparent);
+  color: var(--mode-accent-2);
+  background: var(--mode-soft);
+}
+body[data-game-mode] .access-granted::before {
+  background: var(--mode-accent);
+  box-shadow: 0 0 11px var(--mode-glow);
+}
+body[data-game-mode] .progress-value {
+  background: linear-gradient(90deg, var(--mode-accent), var(--mode-accent-2));
+  box-shadow: 0 0 17px var(--mode-glow);
+}
+body[data-game-mode] .clue-card {
+  background:
+    radial-gradient(340px 180px at 90% 0%, var(--mode-soft), transparent 62%),
+    linear-gradient(145deg, #1c1a17, #121210);
+}
+body[data-game-mode] .hint-reveal {
+  border-color: color-mix(in srgb, var(--mode-accent) 34%, transparent);
+  background:
+    linear-gradient(145deg, var(--mode-soft), rgba(255,255,255,.018));
+}
+body[data-game-mode] .hint-reveal p {
+  color: var(--mode-accent-2);
+}
+body[data-game-mode] .input-action input:focus,
+body[data-game-mode] .mission-code-input:focus {
+  border-color: color-mix(in srgb, var(--mode-accent) 58%, transparent);
+  box-shadow: 0 0 0 3px var(--mode-soft);
+}
+body[data-game-mode] .final-access-card {
+  border-color: color-mix(in srgb, var(--mode-accent) 22%, var(--line));
+  background:
+    linear-gradient(145deg, var(--mode-soft), rgba(255,255,255,.012));
+}
+body[data-game-mode] .complete-ring,
+body[data-game-mode] .gift-symbol {
+  border-color: color-mix(in srgb, var(--mode-accent) 45%, transparent);
+  color: var(--mode-accent-2);
+  background:
+    radial-gradient(circle, var(--mode-soft), transparent 65%);
+  box-shadow: 0 0 52px var(--mode-soft);
+}
+body[data-game-mode] .final-reveal-btn {
+  border-color: color-mix(in srgb, var(--mode-accent-2) 72%, #ffffff 10%);
+  background:
+    linear-gradient(135deg, var(--mode-accent-2), var(--mode-accent));
+  color: #18130f;
+  box-shadow: 0 18px 55px var(--mode-soft);
+}
+body[data-game-mode="hell"] .final-reveal-btn {
+  color: #170909;
+}
+body[data-game-mode] .ceremony-overlay {
+  background:
+    radial-gradient(circle at 50% 42%, var(--mode-soft), transparent 31%),
+    rgba(7,7,6,.978);
+}
+body[data-game-mode] .ceremony-mark {
+  border-color: color-mix(in srgb, var(--mode-accent) 50%, transparent);
+  box-shadow:
+    inset 0 0 0 7px rgba(255,255,255,.015),
+    0 0 64px var(--mode-soft);
+}
+body[data-game-mode] .ceremony-mark::after {
+  background: var(--mode-accent);
+  box-shadow: 0 0 18px var(--mode-glow);
+}
+body[data-game-mode] .ceremony-title {
+  color: var(--mode-accent-2);
+}
+body[data-game-mode="roast"] .mode-badge {
+  transform: rotate(-.15deg);
+}
+body[data-game-mode="hell"] .mode-badge {
+  border-style: solid;
+}
+body[data-game-mode="hell"] .mode-badge::before {
+  content: "CLEARANCE";
+  position: absolute;
+  right: 14px;
+  bottom: 5px;
+  color: rgba(232,164,157,.11);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+body[data-game-mode="roast"] .action-feedback.error {
+  color: #e2b978;
+}
+body[data-game-mode="hell"] .action-feedback.error {
+  border-color: rgba(201,111,103,.28);
+  background: rgba(128,37,34,.14);
+  color: #e8a49d;
+}
+
+@media (max-width: 420px) {
+  .mode-badge {
+    grid-template-columns: 1fr;
+    gap: 7px;
+    margin-top: -16px;
+    padding: 12px 14px;
+  }
+  .mode-badge > div {
+    min-width: 0;
+  }
+}
+
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
