@@ -521,6 +521,28 @@ function bindEvents() {
     clearDraft
   );
 
+  editDataBtn.addEventListener(
+  'click',
+  returnToEdit
+);
+
+
+finalAgreement.addEventListener(
+  'change',
+  () => {
+
+    confirmCreateBtn.disabled =
+      !finalAgreement.checked;
+
+  }
+);
+
+
+confirmCreateBtn.addEventListener(
+  'click',
+  handleConfirmCreate
+);
+
 }
 
 
@@ -549,28 +571,22 @@ function handleNext() {
     BM_SETUP.TOTAL_STEPS
   ) {
 
+
     currentStep++;
+
 
     updateStepUI();
 
+
     scrollToTop();
+
 
     return;
 
   }
 
 
-  /*
-   * Phase 03-C
-   *
-   * 下一階段會在這裡
-   * 進入「最終確認頁」。
-   */
-
-
-  showToast(
-    '資料已暫存完成 ✓ 下一階段進入最終確認'
-  );
+  showConfirmationPage();
 
 }
 
@@ -1765,5 +1781,641 @@ function debounce(
       );
 
   };
+
+}
+
+/* ======================================
+ * FINAL CONFIRMATION
+ * ====================================== */
+
+
+function showConfirmationPage() {
+
+
+  const data =
+    collectDraftData();
+
+
+  const missionCount =
+    Number(
+      data.missionCount
+    );
+
+
+  if (
+    missionCount < 1 ||
+    missionCount > 4
+  ) {
+
+
+    showToast(
+      'Mission 數量資料異常'
+    );
+
+
+    return;
+
+  }
+
+
+  renderConfirmBasic(
+    data
+  );
+
+
+  renderConfirmMissions(
+    data
+  );
+
+
+  renderConfirmGift(
+    data
+  );
+
+
+  renderConfirmCard(
+    data
+  );
+
+
+  /*
+   * 隱藏原本填寫區
+   */
+
+
+  document
+    .querySelector('.hero')
+    .hidden =
+      true;
+
+
+  document
+    .querySelector('.progress-box')
+    .hidden =
+      true;
+
+
+  form.hidden =
+    true;
+
+
+  document
+    .querySelector('.form-nav')
+    .hidden =
+      true;
+
+
+  document
+    .querySelector('.autosave-note')
+    .hidden =
+      true;
+
+
+  /*
+   * 顯示確認頁
+   */
+
+
+  confirmationPage.hidden =
+    false;
+
+
+  finalAgreement.checked =
+    false;
+
+
+  confirmCreateBtn.disabled =
+    true;
+
+
+  scrollToTop();
+
+}
+
+
+/* ======================================
+ * BASIC
+ * ====================================== */
+
+
+function renderConfirmBasic(
+  data
+) {
+
+
+  confirmBasic.innerHTML = `
+
+    ${confirmRow(
+      '蝦皮訂單編號',
+      data.orderNo
+    )}
+
+    ${confirmRow(
+      '壽星暱稱',
+      data.nickname
+    )}
+
+    ${confirmRow(
+      '生日日期',
+      formatBirthdayDate(
+        data.birthdayDate
+      )
+    )}
+
+    ${confirmRow(
+      'Mission 數量',
+      `${data.missionCount} 關`
+    )}
+
+    ${confirmRow(
+      '遊戲模式',
+      data.gameMode
+    )}
+
+    ${confirmRow(
+      '解鎖時間',
+      data.unlockTime
+    )}
+
+    ${confirmRow(
+      '人道救援時間',
+      data.rescueTime
+    )}
+
+  `;
+
+}
+
+
+/* ======================================
+ * MISSIONS
+ * ====================================== */
+
+
+function renderConfirmMissions(
+  data
+) {
+
+
+  const count =
+    Number(
+      data.missionCount
+    );
+
+
+  confirmMissionSubtitle.textContent =
+    `本次共安排 ${count} 個 Mission`;
+
+
+  confirmMissions.innerHTML =
+    '';
+
+
+  const activeMissions =
+    data.missions.slice(
+      0,
+      count
+    );
+
+
+  activeMissions.forEach(
+    (
+      mission,
+      index
+    ) => {
+
+
+      const stage =
+        index + 1;
+
+
+      const padded =
+        String(stage)
+          .padStart(
+            2,
+            '0'
+          );
+
+
+      const article =
+        document.createElement(
+          'article'
+        );
+
+
+      article.className =
+        'confirm-mission';
+
+
+      article.innerHTML = `
+
+        <div class="confirm-mission-head">
+
+          <div>
+
+            <div class="confirm-mission-label">
+              PRIVATE MISSION
+            </div>
+
+            <div class="confirm-mission-title">
+              MISSION ${padded}
+            </div>
+
+          </div>
+
+
+          <div class="confirm-mission-number">
+            ${stage}/${count}
+          </div>
+
+        </div>
+
+
+        ${confirmRow(
+          '實體卡藏匿位置',
+          mission.hideLocation
+        )}
+
+
+        ${confirmRow(
+          '初始線索',
+          mission.clue
+        )}
+
+
+        ${confirmRow(
+          '提示解鎖題目',
+          mission.hintQuestion
+        )}
+
+
+        ${confirmRow(
+          '正確答案',
+          mission.hintAnswer
+        )}
+
+
+        ${confirmRow(
+          '答對後提示',
+          mission.hint
+        )}
+
+      `;
+
+
+      confirmMissions.appendChild(
+        article
+      );
+
+    }
+  );
+
+}
+
+
+/* ======================================
+ * GIFT
+ * ====================================== */
+
+
+function renderConfirmGift(
+  data
+) {
+
+
+  confirmGift.innerHTML = `
+
+    ${confirmRow(
+      '最終禮物位置',
+      data.giftLocation
+    )}
+
+    ${confirmRow(
+      '破關祝福',
+      data.completionBlessing
+    )}
+
+  `;
+
+}
+
+
+/* ======================================
+ * CARD
+ * ====================================== */
+
+
+function renderConfirmCard(
+  data
+) {
+
+
+  let photoHtml =
+    '';
+
+
+  if (
+    photoInput.files.length &&
+    photoPreview.src
+  ) {
+
+
+    photoHtml = `
+
+      <div class="confirm-photo">
+
+        <img
+          src="${photoPreview.src}"
+          alt="生日卡照片確認"
+        >
+
+      </div>
+
+    `;
+
+  }
+
+
+  confirmCard.innerHTML = `
+
+    ${confirmRow(
+      '卡片標題',
+      data.card.title
+    )}
+
+    ${confirmRow(
+      '卡片副標題',
+      data.card.subtitle
+    )}
+
+    ${confirmRow(
+      '生日祝福',
+      data.card.message
+    )}
+
+    ${confirmRow(
+      '署名',
+      data.card.signature
+    )}
+
+    <div class="confirm-row">
+
+      <div class="confirm-key">
+        卡片模板
+      </div>
+
+      <div class="confirm-value">
+
+        <span class="template-tag">
+          ${escapeHtml(
+            data.card.template
+          )}
+        </span>
+
+      </div>
+
+    </div>
+
+    <div class="confirm-row">
+
+      <div class="confirm-key">
+        生日卡照片
+      </div>
+
+      <div class="confirm-value">
+        ${
+          photoInput.files.length
+            ? escapeHtml(
+                photoInput
+                  .files[0]
+                  .name
+              )
+            : '尚未選擇'
+        }
+      </div>
+
+    </div>
+
+    ${photoHtml}
+
+  `;
+
+}
+
+
+/* ======================================
+ * RETURN TO EDIT
+ * ====================================== */
+
+
+function returnToEdit() {
+
+
+  confirmationPage.hidden =
+    true;
+
+
+  document
+    .querySelector('.hero')
+    .hidden =
+      false;
+
+
+  document
+    .querySelector('.progress-box')
+    .hidden =
+      false;
+
+
+  form.hidden =
+    false;
+
+
+  document
+    .querySelector('.form-nav')
+    .hidden =
+      false;
+
+
+  document
+    .querySelector('.autosave-note')
+    .hidden =
+      false;
+
+
+  /*
+   * 返回最後一頁修改
+   */
+
+
+  currentStep =
+    BM_SETUP.TOTAL_STEPS;
+
+
+  updateStepUI();
+
+
+  scrollToTop();
+
+}
+
+
+/* ======================================
+ * CREATE BUTTON
+ * ====================================== */
+
+
+function handleConfirmCreate() {
+
+
+  if (
+    !finalAgreement.checked
+  ) {
+
+
+    showToast(
+      '請先確認資料內容'
+    );
+
+
+    return;
+
+  }
+
+
+  /*
+   * Phase 03-D
+   *
+   * 這裡才會正式：
+   *
+   * 1. 處理照片
+   * 2. POST Apps Script
+   * 3. action=create
+   * 4. 建立 Game ID
+   * 5. 建立 Mission 密碼
+   * 6. 寫入 Google Sheet
+   */
+
+
+  showToast(
+    '最終確認完成 ✓ 下一階段正式建立 Birthday Mission'
+  );
+
+}
+
+
+/* ======================================
+ * CONFIRM HELPERS
+ * ====================================== */
+
+
+function confirmRow(
+  key,
+  value
+) {
+
+
+  return `
+
+    <div class="confirm-row">
+
+      <div class="confirm-key">
+        ${escapeHtml(key)}
+      </div>
+
+      <div class="confirm-value">
+        ${escapeHtml(
+          value || '—'
+        )}
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+function formatBirthdayDate(
+  value
+) {
+
+
+  if (!value) {
+
+    return '—';
+
+  }
+
+
+  const parts =
+    String(value)
+      .split('-');
+
+
+  if (
+    parts.length !== 3
+  ) {
+
+    return value;
+
+  }
+
+
+  return (
+    parts[0] +
+    ' / ' +
+    parts[1] +
+    ' / ' +
+    parts[2]
+  );
+
+}
+
+
+/*
+ * 非常重要：
+ *
+ * 客戶輸入內容放進 innerHTML 前
+ * 必須 escape。
+ *
+ * 避免輸入 HTML / Script
+ * 破壞確認頁。
+ */
+
+
+function escapeHtml(
+  value
+) {
+
+
+  return String(
+    value ?? ''
+  )
+
+    .replace(
+      /&/g,
+      '&amp;'
+    )
+
+    .replace(
+      /</g,
+      '&lt;'
+    )
+
+    .replace(
+      />/g,
+      '&gt;'
+    )
+
+    .replace(
+      /"/g,
+      '&quot;'
+    )
+
+    .replace(
+      /'/g,
+      '&#039;'
+    );
 
 }
