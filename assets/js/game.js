@@ -14,6 +14,7 @@ let countdownTimer = null;
 let rescueTimer = null;
 let actionBusy = false;
 let toastTimer = null;
+let ceremonyTimer = null;
 
 const previewBanner = document.getElementById('previewBanner');
 const startBtn = document.getElementById('startBtn');
@@ -41,6 +42,14 @@ const unlockCardBtn = document.getElementById('unlockCardBtn');
 const previewCardBtn = document.getElementById('previewCardBtn');
 const previewCardRestartBtn = document.getElementById('previewCardRestartBtn');
 const toast = document.getElementById('toast');
+const ceremonyOverlay = document.getElementById('ceremonyOverlay');
+const ceremonyKicker = document.getElementById('ceremonyKicker');
+const ceremonyTitle = document.getElementById('ceremonyTitle');
+const ceremonySubtitle = document.getElementById('ceremonySubtitle');
+const reduceMotion = Boolean(
+  window.matchMedia &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches
+);
 
 init();
 
@@ -184,10 +193,24 @@ async function handleStart() {
     if (isPreview) {
       previewStage = 1;
       previewHints.clear();
+      await playCeremony({
+        kicker: 'PRIVATE ACCESS',
+        title: 'ACCESS GRANTED',
+        subtitle: 'PREVIEW MISSION PROTOCOL STARTED',
+        kind: 'access',
+        duration: 900,
+      });
       await loadPreviewStage();
     } else {
       const result = await callApi({ action: 'start', g: gameId });
       if (result.status !== 'ACTIVE') throw new Error('遊戲啟動狀態異常。');
+      await playCeremony({
+        kicker: 'PRIVATE ACCESS',
+        title: 'ACCESS GRANTED',
+        subtitle: 'BIRTHDAY MISSION PROTOCOL STARTED',
+        kind: 'access',
+        duration: 900,
+      });
       renderMission(result, false);
     }
   } catch (error) {
@@ -295,24 +318,50 @@ async function handleUnlock() {
     }
 
     if (result.status === 'PREVIEW_STAGE_COMPLETE') {
-      showToast(`MISSION ${String(result.completedStage).padStart(2, '0')} COMPLETE`);
+      await playCeremony({
+        kicker: 'ACCESS VERIFIED',
+        title: `MISSION ${String(result.completedStage).padStart(2, '0')} COMPLETE`,
+        subtitle: 'NEXT SIGNAL ACQUIRED',
+        kind: 'stage',
+        duration: 820,
+      });
       previewStage = Number(result.nextStage);
       await loadPreviewStage();
       return;
     }
 
     if (result.status === 'PREVIEW_ALL_MISSIONS_COMPLETE') {
+      await playCeremony({
+        kicker: 'ALL CHECKPOINTS VERIFIED',
+        title: 'ALL MISSIONS COMPLETE',
+        subtitle: 'FINAL ACCESS AVAILABLE',
+        kind: 'final',
+        duration: 1150,
+      });
       renderPreviewComplete();
       return;
     }
 
     if (result.status === 'STAGE_COMPLETE') {
-      showToast(`MISSION ${String(result.completedStage).padStart(2, '0')} COMPLETE`);
+      await playCeremony({
+        kicker: 'ACCESS VERIFIED',
+        title: `MISSION ${String(result.completedStage).padStart(2, '0')} COMPLETE`,
+        subtitle: 'NEXT SIGNAL ACQUIRED',
+        kind: 'stage',
+        duration: 820,
+      });
       await loadFormalState();
       return;
     }
 
     if (result.status === 'ALL_MISSIONS_COMPLETE') {
+      await playCeremony({
+        kicker: 'ALL CHECKPOINTS VERIFIED',
+        title: 'ALL MISSIONS COMPLETE',
+        subtitle: 'FINAL ACCESS AVAILABLE',
+        kind: 'final',
+        duration: 1150,
+      });
       renderAllComplete();
       return;
     }
@@ -336,6 +385,15 @@ async function handleRevealGift() {
     const result = await callApi({ action: 'revealGift', g: gameId });
     if (result.status !== 'GIFT_REVEALED') throw new Error('禮物揭曉狀態異常。');
     currentFinalResult = result;
+    await playCeremony({
+      kicker: 'FINAL ACCESS',
+      title: 'REWARD UNLOCKED',
+      subtitle: result.revealMethod === 'RESCUE'
+        ? 'HUMANITARIAN OVERRIDE ACCEPTED'
+        : 'BIRTHDAY GIFT LOCATED',
+      kind: result.revealMethod === 'RESCUE' ? 'rescue' : 'gift',
+      duration: 1250,
+    });
     if (result.revealMethod === 'RESCUE') renderRescueSuccess(result);
     else renderGiftReveal(result);
   } catch (error) {
@@ -360,6 +418,13 @@ async function handlePreviewRevealGift() {
       preview: previewToken,
     });
     if (result.status !== 'PREVIEW_GIFT_REVEAL_OK') throw new Error('Preview 禮物揭曉測試異常。');
+    await playCeremony({
+      kicker: 'PREVIEW VERIFIED',
+      title: 'FINAL REVEAL READY',
+      subtitle: 'PROTECTED CONTENT REMAINS HIDDEN',
+      kind: 'gift',
+      duration: 900,
+    });
     showScreen('previewGiftScreen');
   } catch (error) {
     showToast(error.message || '測試失敗。');
@@ -404,6 +469,13 @@ async function handleRescue() {
         ...result,
         revealMethod: 'RESCUE',
       };
+      await playCeremony({
+        kicker: 'EMERGENCY OVERRIDE',
+        title: 'RESCUE ACCEPTED',
+        subtitle: 'FINAL ACCESS HAS BEEN RELEASED',
+        kind: 'rescue',
+        duration: 1050,
+      });
       renderRescueSuccess(currentFinalResult);
       return;
     }
@@ -492,6 +564,13 @@ async function handleUnlockPermanentCard() {
     if (result.status !== 'CARD_UNLOCKED' && result.status !== 'CARD') {
       throw new Error('生日卡解鎖狀態異常。');
     }
+    await playCeremony({
+      kicker: 'BIRTHDAY MEMORY',
+      title: 'MEMORY ARCHIVED',
+      subtitle: 'PERMANENT CARD UNLOCKED',
+      kind: 'memory',
+      duration: 1050,
+    });
     renderBirthdayCard(result, false);
   } catch (error) {
     showToast(error.message || '生日卡解鎖失敗。');
@@ -515,6 +594,13 @@ async function handlePreviewCard() {
       preview: previewToken,
     });
     if (result.status !== 'PREVIEW_CARD') throw new Error('Preview 生日卡讀取異常。');
+    await playCeremony({
+      kicker: 'SAFE PREVIEW',
+      title: 'MEMORY FRAME READY',
+      subtitle: 'NO FORMAL PROGRESS CHANGED',
+      kind: 'memory',
+      duration: 760,
+    });
     renderBirthdayCard(result, true);
   } catch (error) {
     showToast(error.message || '生日卡預覽失敗。');
@@ -914,9 +1000,79 @@ function resetUnlockButton() {
 }
 
 function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
-  document.getElementById(id)?.classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  const nextScreen = document.getElementById(id);
+
+  document
+    .querySelectorAll('.screen')
+    .forEach(screen => screen.classList.remove('active'));
+
+  if (nextScreen) {
+    // Force a clean animation restart when revisiting the same screen.
+    void nextScreen.offsetWidth;
+    nextScreen.classList.add('active');
+  }
+
+  document.body.dataset.bmScreen = id;
+  window.scrollTo({
+    top: 0,
+    behavior: reduceMotion ? 'auto' : 'smooth',
+  });
+}
+
+function wait_(ms) {
+  return new Promise(resolve => {
+    ceremonyTimer = window.setTimeout(resolve, ms);
+  });
+}
+
+async function playCeremony({
+  kicker = '',
+  title = '',
+  subtitle = '',
+  kind = 'stage',
+  duration = 850,
+} = {}) {
+  if (
+    !ceremonyOverlay ||
+    !ceremonyKicker ||
+    !ceremonyTitle ||
+    !ceremonySubtitle
+  ) {
+    return;
+  }
+
+  clearTimeout(ceremonyTimer);
+
+  ceremonyKicker.textContent = kicker;
+  ceremonyTitle.textContent = title;
+  ceremonySubtitle.textContent = subtitle;
+
+  ceremonyOverlay.className =
+    `ceremony-overlay ceremony-${kind}`;
+
+  ceremonyOverlay.setAttribute(
+    'aria-hidden',
+    'false'
+  );
+
+  // Restart CSS animation even when the same ceremony happens twice.
+  void ceremonyOverlay.offsetWidth;
+  ceremonyOverlay.classList.add('show');
+
+  if (reduceMotion) {
+    await wait_(80);
+    ceremonyOverlay.className = 'ceremony-overlay';
+    ceremonyOverlay.setAttribute('aria-hidden', 'true');
+    return;
+  }
+
+  await wait_(duration);
+
+  ceremonyOverlay.classList.add('leaving');
+  await wait_(240);
+
+  ceremonyOverlay.className = 'ceremony-overlay';
+  ceremonyOverlay.setAttribute('aria-hidden', 'true');
 }
 
 function showError(message) {
