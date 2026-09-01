@@ -204,6 +204,18 @@ button:disabled { opacity: .35; cursor: not-allowed; }
 .birthday-card-topline { display: flex; justify-content: space-between; gap: 15px; padding: 18px 20px 15px; font-size: 8px; letter-spacing: .14em; opacity: .7; }
 .birthday-card-photo { margin: 0 18px; overflow: hidden; aspect-ratio: 4/3; border-radius: 18px; background: rgba(0,0,0,.12); }
 .birthday-card-photo img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.birthday-card-photo.photo-load-error {
+  display: grid;
+  place-items: center;
+  min-height: 180px;
+}
+.birthday-card-photo.photo-load-error::after {
+  content: '照片暫時無法載入';
+  color: currentColor;
+  opacity: .58;
+  font-size: 11px;
+  letter-spacing: .08em;
+}
 .birthday-card-copy { padding: 26px 22px 28px; }
 .birthday-card-subtitle { display: block; margin-bottom: 8px; font-size: 11px; letter-spacing: .08em; opacity: .78; }
 .birthday-card-copy h1 { margin: 0 0 18px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(35px, 10vw, 52px); font-weight: 500; line-height: 1; letter-spacing: -.045em; }
