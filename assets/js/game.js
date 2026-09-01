@@ -162,6 +162,15 @@ const MODE_PROFILES = Object.freeze({
 });
 
 
+const BM_NETWORK = Object.freeze({
+  REQUEST_TIMEOUT_MS: 18000,
+  LOADING_MESSAGES: [
+    ['正在確認生日任務資料…', '請保持網路連線，通常只需要幾秒鐘。'],
+    ['正在連線至任務中心…', '如果使用行動網路，第一次載入可能稍慢。'],
+    ['還在確認中…', '請不要重複點擊或重新整理，我們正在等待伺服器回應。'],
+  ],
+});
+
 const params = new URLSearchParams(window.location.search);
 const gameId = String(params.get('g') || '').trim().toUpperCase();
 const previewToken = String(params.get(BM_GAME.PREVIEW_PARAM) || '').trim();
@@ -179,8 +188,16 @@ let toastTimer = null;
 let ceremonyTimer = null;
 let currentGameMode = '暖心模式';
 let modeConfirmed = false;
+let loadingMessageTimer = null;
+let loadingMessageIndex = 0;
 
 const previewBanner = document.getElementById('previewBanner');
+const networkBanner = document.getElementById('networkBanner');
+const loadingMessage = document.getElementById('loadingMessage');
+const loadingDetail = document.getElementById('loadingDetail');
+const waitingRefreshBtn = document.getElementById('waitingRefreshBtn');
+const disabledRefreshBtn = document.getElementById('disabledRefreshBtn');
+const errorRetryBtn = document.getElementById('errorRetryBtn');
 const modeBadge = document.getElementById('modeBadge');
 const modeBadgeCode = document.getElementById('modeBadgeCode');
 const modeBadgeLabel = document.getElementById('modeBadgeLabel');
@@ -223,9 +240,11 @@ init();
 
 async function init() {
   restoreGameMode_();
+  updateNetworkState_();
 
   if (!gameId) {
-    showError('網址缺少 Game ID。');
+    errorRetryBtn.hidden = true;
+    showError('網址缺少 Game ID，請重新從正式 NFC 網址或測試網址進入。');
     return;
   }
 
@@ -255,6 +274,18 @@ function bindEvents() {
   restartPreviewBtn.addEventListener('click', restartPreview);
   previewGiftRestartBtn.addEventListener('click', restartPreview);
   previewCardRestartBtn.addEventListener('click', restartPreview);
+  waitingRefreshBtn.addEventListener('click', refreshCurrentState_);
+  disabledRefreshBtn.addEventListener('click', refreshCurrentState_);
+  errorRetryBtn.addEventListener('click', refreshCurrentState_);
+
+  window.addEventListener('online', () => {
+    updateNetworkState_();
+    showToast('網路已恢復，可以繼續 Birthday Mission');
+  });
+
+  window.addEventListener('offline', () => {
+    updateNetworkState_();
+  });
 
   hintAnswerInput.addEventListener('keydown', event => {
     if (event.key === 'Enter') {
@@ -276,18 +307,74 @@ function bindEvents() {
 }
 
 async function callApi(payload) {
-  const response = await fetch(BM_CONFIG.API_URL, {
-    method: 'POST',
-    redirect: 'follow',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(payload),
-  });
+  if (navigator.onLine === false) {
+    throw new Error('目前沒有網路連線，請確認 Wi-Fi 或行動網路後再試一次。');
+  }
 
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  const controller =
+    typeof AbortController !== 'undefined'
+      ? new AbortController()
+      : null;
 
-  const result = await response.json();
-  if (result.ok !== true) throw new Error(result.error || '系統連線失敗。');
-  return result;
+  const timeoutId = window.setTimeout(() => {
+    controller?.abort();
+  }, BM_NETWORK.REQUEST_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(BM_CONFIG.API_URL, {
+      method: 'POST',
+      redirect: 'follow',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8',
+      },
+      body: JSON.stringify(payload),
+      signal: controller?.signal,
+      cache: 'no-store',
+    });
+
+    if (!response.ok) {
+      throw new Error(`伺服器連線異常（HTTP ${response.status}）。`);
+    }
+
+    const text = await response.text();
+
+    let result;
+    try {
+      result = JSON.parse(text);
+    } catch (ignore) {
+      throw new Error('伺服器回傳格式異常，請重新嘗試。');
+    }
+
+    if (result.ok !== true) {
+      throw new Error(result.error || '系統連線失敗。');
+    }
+
+    return result;
+
+  } catch (error) {
+    if (error?.name === 'AbortError') {
+      throw new Error('連線等待過久，請確認網路後重新嘗試。');
+    }
+
+    if (
+      error instanceof TypeError &&
+      navigator.onLine === false
+    ) {
+      throw new Error('目前沒有網路連線，請確認 Wi-Fi 或行動網路後再試一次。');
+    }
+
+    if (
+      error instanceof TypeError &&
+      /fetch|network|failed/i.test(String(error.message || ''))
+    ) {
+      throw new Error('暫時無法連線到 Birthday Mission，請稍後再試一次。');
+    }
+
+    throw error;
+
+  } finally {
+    clearTimeout(timeoutId);
+  }
 }
 
 async function loadFormalState() {
@@ -358,7 +445,7 @@ async function loadPreviewState() {
 
 async function handleStart() {
   if (actionBusy) return;
-  actionBusy = true;
+  setActionBusy_(true);
   startBtn.disabled = true;
   startBtn.textContent = isPreview ? '安全測試載入中...' : 'Birthday Mission 啟動中...';
 
@@ -380,7 +467,7 @@ async function handleStart() {
     startBtn.disabled = false;
     startBtn.textContent = isPreview ? getModeProfile_().previewStartButton : getModeProfile_().startButton;
   } finally {
-    actionBusy = false;
+    setActionBusy_(false);
   }
 }
 
@@ -407,7 +494,7 @@ async function handleHint() {
     return;
   }
 
-  actionBusy = true;
+  setActionBusy_(true);
   hintSubmitBtn.disabled = true;
   hintSubmitBtn.textContent = '驗證中...';
 
@@ -445,7 +532,7 @@ async function handleHint() {
     hintSubmitBtn.disabled = false;
     hintSubmitBtn.textContent = getModeProfile_().hintButton;
   } finally {
-    actionBusy = false;
+    setActionBusy_(false);
   }
 }
 
@@ -458,7 +545,7 @@ async function handleUnlock() {
     return;
   }
 
-  actionBusy = true;
+  setActionBusy_(true);
   missionUnlockBtn.disabled = true;
   missionUnlockBtn.textContent = '驗證中...';
 
@@ -509,13 +596,13 @@ async function handleUnlock() {
     showFeedback(codeFeedback, error.message || 'Mission 驗證失敗。', false);
     resetUnlockButton();
   } finally {
-    actionBusy = false;
+    setActionBusy_(false);
   }
 }
 
 async function handleRevealGift() {
   if (actionBusy) return;
-  actionBusy = true;
+  setActionBusy_(true);
   revealGiftBtn.disabled = true;
   revealGiftBtn.textContent = '正在揭曉生日禮物...';
 
@@ -534,13 +621,13 @@ async function handleRevealGift() {
     revealGiftBtn.disabled = false;
     revealGiftBtn.textContent = getModeProfile_().revealButton;
   } finally {
-    actionBusy = false;
+    setActionBusy_(false);
   }
 }
 
 async function handlePreviewRevealGift() {
   if (actionBusy) return;
-  actionBusy = true;
+  setActionBusy_(true);
   previewRevealBtn.disabled = true;
   previewRevealBtn.textContent = '測試中...';
 
@@ -558,13 +645,13 @@ async function handlePreviewRevealGift() {
     previewRevealBtn.disabled = false;
     previewRevealBtn.textContent = '測試禮物揭曉';
   } finally {
-    actionBusy = false;
+    setActionBusy_(false);
   }
 }
 
 async function handleRescue() {
   if (actionBusy) return;
-  actionBusy = true;
+  setActionBusy_(true);
   rescueBtn.disabled = true;
   rescueBtn.textContent = '確認中...';
 
@@ -607,7 +694,7 @@ async function handleRescue() {
     rescueBtn.disabled = false;
     rescueBtn.textContent = isPreview ? `測試｜${getModeProfile_().rescueButton}` : getModeProfile_().rescueButton;
   } finally {
-    actionBusy = false;
+    setActionBusy_(false);
   }
 }
 
@@ -683,7 +770,7 @@ function renderReport(report, preview) {
 
 async function handleUnlockPermanentCard() {
   if (actionBusy) return;
-  actionBusy = true;
+  setActionBusy_(true);
   unlockCardBtn.disabled = true;
   unlockCardBtn.textContent = '正在解鎖生日卡...';
 
@@ -699,13 +786,13 @@ async function handleUnlockPermanentCard() {
     unlockCardBtn.disabled = false;
     unlockCardBtn.textContent = getModeProfile_().cardButton;
   } finally {
-    actionBusy = false;
+    setActionBusy_(false);
   }
 }
 
 async function handlePreviewCard() {
   if (actionBusy) return;
-  actionBusy = true;
+  setActionBusy_(true);
   previewCardBtn.disabled = true;
   previewCardBtn.textContent = '載入生日卡...';
 
@@ -723,7 +810,7 @@ async function handlePreviewCard() {
     previewCardBtn.disabled = false;
     previewCardBtn.textContent = '預覽永久生日卡';
   } finally {
-    actionBusy = false;
+    setActionBusy_(false);
   }
 }
 
@@ -1113,6 +1200,7 @@ function renderRescueSuccess(data) {
 }
 
 function restartPreview() {
+  if (actionBusy) return;
   window.location.reload();
 }
 
@@ -1133,6 +1221,11 @@ function renderLocked(data) {
 function startCountdown(targetString) {
   clearInterval(countdownTimer);
   const target = new Date(targetString);
+
+  if (Number.isNaN(target.getTime())) {
+    showError('生日任務的解鎖時間格式異常，請聯絡賣家確認。');
+    return;
+  }
 
   const update = () => {
     const diff = target.getTime() - Date.now();
@@ -1270,8 +1363,124 @@ async function playModeCeremony_(type, duration, stage) {
   });
 }
 
+
+function setActionBusy_(busy) {
+  actionBusy = Boolean(busy);
+  document.body.classList.toggle('is-busy', actionBusy);
+  document.body.setAttribute(
+    'aria-busy',
+    actionBusy ? 'true' : 'false'
+  );
+}
+
+function updateNetworkState_() {
+  const offline = navigator.onLine === false;
+
+  document.body.classList.toggle(
+    'is-offline',
+    offline
+  );
+
+  if (networkBanner) {
+    networkBanner.hidden = !offline;
+  }
+}
+
+function startLoadingMessages_() {
+  stopLoadingMessages_();
+  loadingMessageIndex = 0;
+  renderLoadingMessage_();
+
+  loadingMessageTimer = window.setInterval(() => {
+    loadingMessageIndex =
+      Math.min(
+        loadingMessageIndex + 1,
+        BM_NETWORK.LOADING_MESSAGES.length - 1
+      );
+
+    renderLoadingMessage_();
+
+    if (
+      loadingMessageIndex >=
+      BM_NETWORK.LOADING_MESSAGES.length - 1
+    ) {
+      clearInterval(loadingMessageTimer);
+      loadingMessageTimer = null;
+    }
+  }, 4500);
+}
+
+function stopLoadingMessages_() {
+  if (loadingMessageTimer) {
+    clearInterval(loadingMessageTimer);
+    loadingMessageTimer = null;
+  }
+}
+
+function renderLoadingMessage_() {
+  const item =
+    BM_NETWORK.LOADING_MESSAGES[
+      loadingMessageIndex
+    ] ||
+    BM_NETWORK.LOADING_MESSAGES[0];
+
+  if (loadingMessage) {
+    loadingMessage.textContent = item[0];
+  }
+
+  if (loadingDetail) {
+    loadingDetail.textContent = item[1];
+  }
+}
+
+async function refreshCurrentState_() {
+  if (actionBusy) return;
+
+  if (navigator.onLine === false) {
+    updateNetworkState_();
+    showToast('目前沒有網路連線，請先恢復連線。');
+    return;
+  }
+
+  setActionBusy_(true);
+
+  const buttons = [
+    waitingRefreshBtn,
+    disabledRefreshBtn,
+    errorRetryBtn,
+  ].filter(Boolean);
+
+  buttons.forEach(button => {
+    button.disabled = true;
+  });
+
+  try {
+    if (isPreview) {
+      await loadPreviewState();
+    } else {
+      await loadFormalState();
+    }
+  } catch (error) {
+    showError(
+      error.message ||
+      'Birthday Mission 讀取失敗。'
+    );
+  } finally {
+    buttons.forEach(button => {
+      button.disabled = false;
+    });
+    setActionBusy_(false);
+  }
+}
+
 function showScreen(id) {
   const nextScreen = document.getElementById(id);
+
+  if (id === 'loadingScreen') {
+    startLoadingMessages_();
+  } else {
+    stopLoadingMessages_();
+  }
 
   document
     .querySelectorAll('.screen')
@@ -1349,7 +1558,16 @@ async function playCeremony({
 function showError(message) {
   clearInterval(countdownTimer);
   clearInterval(rescueTimer);
-  document.getElementById('errorMessage').textContent = message;
+  stopLoadingMessages_();
+
+  document.getElementById('errorMessage').textContent =
+    message ||
+    'Birthday Mission 暫時無法讀取。';
+
+  errorRetryBtn.hidden = !gameId;
+  errorRetryBtn.disabled = false;
+  errorRetryBtn.textContent = '重新載入生日任務';
+
   showScreen('errorScreen');
 }
 
