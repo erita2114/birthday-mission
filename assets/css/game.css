@@ -1,19 +1,17 @@
 :root {
 
   --bg: #101010;
-
   --surface: #181818;
-
   --surface-2: #202020;
 
   --text: #f3efe7;
-
   --muted: #aaa49b;
 
   --line:
     rgba(255,255,255,.11);
 
   --cream: #e7ddcc;
+  --gold: #d5bd8c;
 
 }
 
@@ -40,7 +38,6 @@ body {
   min-height: 100vh;
 
   background:
-
     radial-gradient(
       circle at top,
       #26231e 0,
@@ -61,24 +58,16 @@ body {
 
 button,
 input {
-
   font: inherit;
-
 }
 
 
 button {
-
-  -webkit-tap-highlight-color:
-    transparent;
-
+  -webkit-tap-highlight-color: transparent;
 }
 
 
-/* ===================================
-   PREVIEW
-   =================================== */
-
+/* PREVIEW */
 
 .preview-banner {
 
@@ -110,10 +99,7 @@ button {
 }
 
 
-/* ===================================
-   SHELL
-   =================================== */
-
+/* SHELL */
 
 .game-shell {
 
@@ -131,10 +117,7 @@ button {
 }
 
 
-/* ===================================
-   BRAND
-   =================================== */
-
+/* BRAND */
 
 .game-brand {
 
@@ -198,10 +181,7 @@ button {
 }
 
 
-/* ===================================
-   SCREENS
-   =================================== */
-
+/* SCREEN */
 
 .screen {
   display: none;
@@ -283,9 +263,9 @@ button {
       48px
     );
 
-  letter-spacing: -.04em;
-
   line-height: 1.1;
+
+  letter-spacing: -.04em;
 
 }
 
@@ -303,10 +283,7 @@ button {
 }
 
 
-/* ===================================
-   LOADING
-   =================================== */
-
+/* LOADING */
 
 .loading-ring {
 
@@ -320,7 +297,7 @@ button {
     2px solid
     rgba(255,255,255,.14);
 
-  border-top-color: #ffffff;
+  border-top-color: #fff;
 
   border-radius: 50%;
 
@@ -339,10 +316,7 @@ button {
 }
 
 
-/* ===================================
-   STATUS
-   =================================== */
-
+/* STATUS */
 
 .status-icon {
 
@@ -388,10 +362,7 @@ button {
 }
 
 
-/* ===================================
-   LOCKED
-   =================================== */
-
+/* LOCKED */
 
 .locked-emoji {
 
@@ -410,7 +381,7 @@ button {
   display: grid;
 
   grid-template-columns:
-    repeat(4, 1fr);
+    repeat(4,1fr);
 
   gap: 7px;
 
@@ -470,10 +441,7 @@ button {
 }
 
 
-/* ===================================
-   READY
-   =================================== */
-
+/* READY */
 
 .access-granted {
 
@@ -549,7 +517,7 @@ button {
   display: grid;
 
   grid-template-columns:
-    repeat(2, 1fr);
+    repeat(2,1fr);
 
   margin:
     34px 0 22px;
@@ -566,9 +534,7 @@ button {
 
 
 .ready-meta > div {
-
   padding: 17px;
-
 }
 
 
@@ -605,17 +571,15 @@ button {
 }
 
 
-/* ===================================
-   BUTTON
-   =================================== */
-
+/* BUTTONS */
 
 .main-btn,
-.outline-btn {
+.outline-btn,
+.final-reveal-btn {
 
   width: 100%;
 
-  min-height: 56px;
+  min-height: 58px;
 
   border-radius: 15px;
 
@@ -634,8 +598,7 @@ button {
     1px solid
     var(--cream);
 
-  background:
-    var(--cream);
+  background: var(--cream);
 
   color: #181512;
 
@@ -655,6 +618,30 @@ button {
 }
 
 
+.final-reveal-btn {
+
+  margin-top: 16px;
+
+  border:
+    1px solid
+    #e2cfa7;
+
+  background:
+    linear-gradient(
+      135deg,
+      #e8dcc2,
+      #cbb17b
+    );
+
+  color: #1b1711;
+
+  box-shadow:
+    0 15px 50px
+    rgba(196,163,98,.15);
+
+}
+
+
 button:disabled {
 
   opacity: .35;
@@ -664,10 +651,7 @@ button:disabled {
 }
 
 
-/* ===================================
-   MISSION
-   =================================== */
-
+/* MISSION */
 
 .mission-top {
 
@@ -740,10 +724,7 @@ button:disabled {
 }
 
 
-/* ===================================
-   CLUE
-   =================================== */
-
+/* CLUE */
 
 .clue-card {
 
@@ -804,10 +785,7 @@ button:disabled {
 }
 
 
-/* ===================================
-   ACTION CARD
-   =================================== */
-
+/* ACTION */
 
 .mission-action-card {
 
@@ -884,8 +862,6 @@ button:disabled {
 
   color: #c3bbad;
 
-  font-size: 14px;
-
 }
 
 
@@ -903,21 +879,17 @@ button:disabled {
 }
 
 
-/* ===================================
-   HINT
-   =================================== */
-
+/* HINT */
 
 .hint-question {
 
   margin-bottom: 14px;
 
-  padding:
-    16px 17px;
+  padding: 16px 17px;
 
   border-radius: 14px;
 
-  background: #111111;
+  background: #111;
 
 }
 
@@ -979,19 +951,11 @@ button:disabled {
 
   outline: none;
 
-  background: #111111;
+  background: #111;
 
   color: var(--text);
 
   font-size: 16px;
-
-}
-
-
-.input-action input:focus {
-
-  border-color:
-    rgba(231,221,204,.55);
 
 }
 
@@ -1026,8 +990,7 @@ button:disabled {
 
   margin-top: 12px;
 
-  padding:
-    11px 13px;
+  padding: 11px 13px;
 
   border-radius: 11px;
 
@@ -1089,10 +1052,7 @@ button:disabled {
 }
 
 
-/* ===================================
-   MISSION CODE
-   =================================== */
-
+/* CODE */
 
 .code-input-area {
 
@@ -1117,7 +1077,7 @@ button:disabled {
 
   outline: none;
 
-  background: #111111;
+  background: #111;
 
   color: var(--text);
 
@@ -1140,18 +1100,7 @@ button:disabled {
 }
 
 
-.mission-code-input:focus {
-
-  border-color:
-    rgba(231,221,204,.55);
-
-}
-
-
-/* ===================================
-   RESCUE
-   =================================== */
-
+/* RESCUE */
 
 .rescue-panel {
 
@@ -1193,18 +1142,13 @@ button:disabled {
 
 
 .rescue-panel strong {
-
   display: block;
-
-  font-size: 14px;
-
 }
 
 
 .rescue-panel p {
 
-  margin:
-    5px 0;
+  margin: 5px 0;
 
   color: var(--muted);
 
@@ -1248,10 +1192,7 @@ button:disabled {
 }
 
 
-/* ===================================
-   COMPLETE
-   =================================== */
-
+/* COMPLETE */
 
 .complete-ring {
 
@@ -1278,43 +1219,66 @@ button:disabled {
 }
 
 
-.phase-next-box,
-.preview-final-box {
+.final-access-card,
+.preview-final-box,
+.preview-protected-card {
 
   width: 100%;
 
   margin:
-    28px 0 18px;
+    28px 0 4px;
 
-  padding: 20px;
+  padding: 22px;
 
   border:
     1px solid
     var(--line);
 
-  border-radius: 17px;
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(218,193,143,.07),
+      rgba(255,255,255,.015)
+    );
 
 }
 
 
-.phase-next-box strong,
-.preview-final-box strong {
+.final-access-card span,
+.preview-protected-card span {
 
   display: block;
 
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 
-  font-size: 12px;
+  color: #978d7d;
 
-  letter-spacing: .08em;
+  font-size: 8px;
+
+  letter-spacing: .16em;
 
 }
 
 
-.phase-next-box p,
-.preview-final-box p {
+.final-access-card strong,
+.preview-final-box strong,
+.preview-protected-card strong {
 
-  margin: 0;
+  display: block;
+
+  font-size: 15px;
+
+}
+
+
+.final-access-card p,
+.preview-final-box p,
+.preview-protected-card p {
+
+  margin:
+    8px 0 0;
 
   color: var(--muted);
 
@@ -1325,17 +1289,87 @@ button:disabled {
 }
 
 
-/* ===================================
-   RESCUE SUCCESS
-   =================================== */
+.text-restart-btn {
+
+  margin-top: 14px;
+
+  padding: 10px;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #8f887e;
+
+  font-size: 11px;
+
+  cursor: pointer;
+
+}
 
 
-.rescue-big-icon {
+/* NORMAL GIFT REVEAL */
+
+.gift-reveal {
+
+  padding:
+    30px 0 20px;
+
+}
+
+
+.gift-symbol {
+
+  width: 72px;
+
+  height: 72px;
+
+  display: grid;
+
+  place-items: center;
+
+  margin-bottom: 27px;
+
+  border:
+    1px solid
+    rgba(218,195,148,.4);
+
+  border-radius: 50%;
+
+  color: #e0c994;
+
+  font-size: 27px;
+
+}
+
+
+.gift-reveal h1 {
 
   margin:
-    18px 0 5px;
+    12px 0 15px;
 
-  font-size: 40px;
+  font-size:
+    clamp(
+      42px,
+      12vw,
+      66px
+    );
+
+  letter-spacing: -.055em;
+
+}
+
+
+.gift-intro {
+
+  margin:
+    0 0 28px;
+
+  max-width: 500px;
+
+  color: var(--muted);
+
+  line-height: 1.9;
 
 }
 
@@ -1344,27 +1378,26 @@ button:disabled {
 
   width: 100%;
 
-  margin-top: 30px;
-
-  padding: 25px;
+  padding: 27px;
 
   border:
     1px solid
     rgba(230,212,175,.32);
 
-  border-radius: 20px;
+  border-radius: 21px;
 
   background:
     linear-gradient(
       145deg,
-      #262117,
+      #292318,
       #171613
     );
 
 }
 
 
-.gift-location-card span {
+.gift-location-card span,
+.gift-blessing-card span {
 
   display: block;
 
@@ -1385,48 +1418,120 @@ button:disabled {
 
   font-size:
     clamp(
-      21px,
-      6vw,
-      29px
+      23px,
+      7vw,
+      32px
     );
 
-  line-height: 1.6;
+  line-height: 1.55;
 
 }
 
 
-.rescue-blessing {
+.gift-blessing-card {
 
   width: 100%;
 
   margin-top: 16px;
 
-  padding: 20px;
+  padding: 23px;
 
   border:
     1px solid
     var(--line);
 
-  border-radius: 17px;
+  border-radius: 18px;
 
 }
 
 
-.rescue-blessing p {
+.gift-blessing-card p {
 
   margin: 0;
 
-  color: #c6beb2;
+  color: #d0c7ba;
 
-  line-height: 1.8;
+  font-size: 15px;
+
+  line-height: 1.9;
+
+  white-space: pre-wrap;
 
 }
 
 
-/* ===================================
-   TOAST
-   =================================== */
+.gift-ending {
 
+  margin-top: 30px;
+
+  padding-top: 22px;
+
+  border-top:
+    1px solid
+    var(--line);
+
+}
+
+
+.gift-ending span {
+
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #858078;
+
+  font-size: 8px;
+
+  letter-spacing: .18em;
+
+}
+
+
+.gift-ending strong {
+
+  font-size: 13px;
+
+  line-height: 1.7;
+
+}
+
+
+/* RESCUE */
+
+.rescue-big-icon {
+
+  margin:
+    18px 0 5px;
+
+  font-size: 40px;
+
+}
+
+
+.rescue-tag {
+
+  margin-top: 24px;
+
+  padding:
+    7px 11px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius: 999px;
+
+  color: #918a80;
+
+  font-size: 8px;
+
+  letter-spacing: .14em;
+
+}
+
+
+/* TOAST */
 
 .toast {
 
@@ -1476,26 +1581,21 @@ button:disabled {
 }
 
 
-/* ===================================
-   MOBILE
-   =================================== */
-
+/* MOBILE */
 
 @media
 (max-width: 520px) {
 
   .input-action {
 
-    grid-template-columns:
-      1fr;
+    grid-template-columns: 1fr;
 
   }
 
 
   .rescue-panel {
 
-    grid-template-columns:
-      1fr;
+    grid-template-columns: 1fr;
 
   }
 
