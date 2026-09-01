@@ -576,6 +576,11 @@ confirmCreateBtn.addEventListener(
   handleConfirmCreate
 );
 
+  copyGameUrlBtn.addEventListener(
+  'click',
+  copySuccessGameUrl
+);
+
 }
 
 
