@@ -1644,6 +1644,270 @@ body[data-game-mode="hell"] .action-feedback.error {
 }
 
 
+
+
+/* =========================================================
+   PHASE 08-04 | COMMERCIAL HARDENING
+   ========================================================= */
+
+html {
+  min-height: 100%;
+  overscroll-behavior-y: none;
+}
+
+body {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+body.is-busy {
+  cursor: progress;
+}
+
+/* Do not block scrolling while an action is running, but prevent accidental text selection. */
+body.is-busy button:disabled {
+  cursor: wait;
+}
+
+.network-banner {
+  position: fixed;
+  left: max(12px, env(safe-area-inset-left));
+  right: max(12px, env(safe-area-inset-right));
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  z-index: 120;
+  max-width: 520px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 10px minmax(0,1fr);
+  gap: 11px;
+  align-items: center;
+  padding: 12px 14px;
+  border: 1px solid rgba(229,182,121,.28);
+  border-radius: 15px;
+  background: rgba(27,22,17,.96);
+  color: #f0dfc6;
+  box-shadow: 0 18px 54px rgba(0,0,0,.38);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+.network-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #d99c77;
+  box-shadow: 0 0 13px rgba(217,156,119,.45);
+}
+.network-banner strong,
+.network-banner span {
+  display: block;
+}
+.network-banner strong {
+  font-size: 11px;
+  font-weight: 760;
+}
+.network-banner span {
+  margin-top: 3px;
+  color: #aa9d8d;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+body.is-offline .toast {
+  bottom: calc(88px + env(safe-area-inset-bottom));
+}
+
+.loading-detail {
+  display: block;
+  max-width: 360px;
+  margin-top: 13px;
+  color: var(--muted-2);
+  font-size: 10px;
+  line-height: 1.65;
+}
+.loading-ring {
+  will-change: transform;
+}
+
+.state-retry-btn {
+  max-width: 360px;
+  margin-top: 20px;
+}
+
+/* Long customer-entered text must never break the layout. */
+.clue-card p,
+.hint-question p,
+.hint-reveal p,
+.action-description,
+.gift-location-card strong,
+.gift-blessing-card p,
+.report-intro,
+.birthday-card-subtitle,
+.birthday-card-copy h1,
+.birthday-card-copy > p,
+.birthday-card-signature strong,
+.permanent-note p,
+.center-screen > p,
+.info-box,
+.mode-badge small {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.gift-location-card strong {
+  display: block;
+  max-width: 100%;
+}
+
+.birthday-card-topline span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+button {
+  min-width: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+button:disabled {
+  opacity: .48;
+  cursor: not-allowed;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+input {
+  min-width: 0;
+  font-size: 16px;
+}
+
+input:disabled {
+  opacity: .58;
+}
+
+/* Avoid iOS zoom and improve touch targets. */
+.main-btn,
+.outline-btn,
+.final-reveal-btn,
+.report-open-btn,
+.secondary-action-btn {
+  min-height: 56px;
+}
+.rescue-btn,
+.text-restart-btn {
+  min-height: 48px;
+}
+
+/* Keyboard focus for accessibility without changing touch appearance. */
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--mode-accent);
+  outline-offset: 3px;
+}
+
+.preview-banner {
+  padding-left: max(14px, env(safe-area-inset-left));
+  padding-right: max(14px, env(safe-area-inset-right));
+}
+
+.game-shell {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Stable mobile viewport when Safari bars appear/disappear. */
+.center-screen {
+  min-height: min(68dvh, 720px);
+}
+
+.mission-code-input {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Commercial small-screen QA */
+@media (max-width: 360px) {
+  .game-shell {
+    width: calc(100% - 18px);
+  }
+
+  .center-screen h1,
+  .mission-intro h1,
+  .report-page h1 {
+    letter-spacing: -.038em;
+  }
+
+  .countdown {
+    gap: 4px;
+  }
+
+  .countdown > div {
+    padding-inline: 1px;
+  }
+
+  .countdown strong {
+    font-size: 20px;
+  }
+
+  .countdown span {
+    font-size: 6px;
+  }
+
+  .ready-meta strong {
+    font-size: 13px;
+  }
+
+  .mission-action-card,
+  .clue-card,
+  .gift-location-card,
+  .gift-blessing-card {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .report-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .report-stat {
+    padding: 12px;
+  }
+
+  .birthday-card-topline {
+    gap: 8px;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-size: 7px;
+  }
+}
+
+@media (max-width: 330px) {
+  .game-shell {
+    width: calc(100% - 14px);
+  }
+
+  .game-brand {
+    gap: 9px;
+  }
+
+  .mode-badge {
+    border-radius: 13px;
+  }
+
+  .countdown > div {
+    border-radius: 12px;
+  }
+
+  .report-stat strong {
+    font-size: 22px;
+  }
+}
+
+@supports not (height: 100dvh) {
+  .center-screen {
+    min-height: min(68svh, 720px);
+  }
+}
+
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     scroll-behavior: auto !important;
