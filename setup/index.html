@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
-
 <head>
-
   <meta charset="UTF-8">
 
   <meta
@@ -10,362 +8,730 @@
     content="width=device-width, initial-scale=1"
   >
 
-  <title>Birthday Mission｜API Test</title>
+  <meta
+    name="theme-color"
+    content="#111111"
+  >
 
-  <style>
+  <title>建立 Birthday Mission</title>
 
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: #111;
-      color: #fff;
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      padding: 24px;
-    }
-
-    .card {
-      width: 100%;
-      max-width: 480px;
-
-      background: #1c1c1c;
-
-      border-radius: 24px;
-
-      padding: 28px;
-
-      box-shadow:
-        0 20px 60px rgba(0,0,0,.35);
-    }
-
-    .label {
-      font-size: 12px;
-      letter-spacing: .16em;
-      opacity: .55;
-    }
-
-    h1 {
-      font-size: 26px;
-      margin:
-        8px 0
-        8px;
-    }
-
-    .description {
-      opacity: .7;
-      line-height: 1.7;
-      margin-bottom: 28px;
-    }
-
-    button {
-      width: 100%;
-      min-height: 54px;
-
-      border: 0;
-      border-radius: 14px;
-
-      font-size: 16px;
-      font-weight: 600;
-
-      cursor: pointer;
-
-      margin-bottom: 12px;
-    }
-
-    #getBtn {
-      background: #fff;
-      color: #111;
-    }
-
-    #postBtn {
-      background: #e6e1d7;
-      color: #111;
-    }
-
-    button:disabled {
-      opacity: .45;
-      cursor: not-allowed;
-    }
-
-    .result {
-      margin-top: 18px;
-
-      padding: 16px;
-
-      border-radius: 14px;
-
-      background: #090909;
-
-      font-size: 14px;
-      line-height: 1.7;
-
-      word-break: break-word;
-
-      min-height: 80px;
-    }
-
-    .ok {
-      color: #88e29c;
-    }
-
-    .error {
-      color: #ff8e8e;
-    }
-
-  </style>
-
+  <link
+    rel="stylesheet"
+    href="../assets/css/setup.css"
+  >
 </head>
 
 <body>
 
-  <main class="card">
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">BM</span>
 
-    <div class="label">
-      PHASE 03
+      <div>
+        <div class="brand-name">
+          BIRTHDAY MISSION
+        </div>
+
+        <div class="brand-sub">
+          PRIVATE BIRTHDAY EXPERIENCE
+        </div>
+      </div>
     </div>
 
-    <h1>
-      API CONNECTION TEST
-    </h1>
-
-    <p class="description">
-      GitHub Pages → Apps Script
-      前後端連線驗收
-    </p>
-
     <button
-      id="getBtn"
+      id="clearDraftBtn"
+      class="text-btn"
       type="button"
     >
-      ① 測試 GET
+      清除暫存
     </button>
+  </header>
 
-    <button
-      id="postBtn"
-      type="button"
-    >
-      ② 測試 POST
-    </button>
 
-    <div
-      id="result"
-      class="result"
+  <main class="shell">
+
+    <section class="hero">
+
+      <div class="eyebrow">
+        NFC BIRTHDAY MISSION
+      </div>
+
+      <h1>
+        建立專屬生日任務
+      </h1>
+
+      <p>
+        請依序完成以下資料。
+        任務內容送出後將進入製作流程，
+        請確認線索與藏匿位置填寫正確。
+      </p>
+
+    </section>
+
+
+    <section class="progress-box">
+
+      <div class="progress-top">
+
+        <span id="stepLabel">
+          STEP 01 / 04
+        </span>
+
+        <span id="stepName">
+          基本設定
+        </span>
+
+      </div>
+
+      <div class="progress-track">
+        <div
+          id="progressBar"
+          class="progress-bar"
+        ></div>
+      </div>
+
+    </section>
+
+
+    <form
+      id="missionForm"
+      novalidate
     >
-      尚未測試
+
+      <!-- STEP 01 -->
+      <section
+        class="form-step active"
+        data-step="1"
+      >
+
+        <div class="section-heading">
+
+          <span class="section-number">
+            01
+          </span>
+
+          <div>
+            <h2>基本設定</h2>
+
+            <p>
+              先告訴我們這場生日任務的基本資訊。
+            </p>
+          </div>
+
+        </div>
+
+
+        <div class="form-card">
+
+          <div class="field">
+
+            <label for="orderNo">
+              蝦皮訂單編號
+              <span>*</span>
+            </label>
+
+            <input
+              id="orderNo"
+              name="orderNo"
+              type="text"
+              autocomplete="off"
+              placeholder="例如：250901XXXXXX"
+              required
+            >
+
+            <div class="help">
+              請填寫本次購買 Birthday Mission
+              的蝦皮訂單編號。
+            </div>
+
+          </div>
+
+
+          <div class="field">
+
+            <label for="nickname">
+              壽星暱稱
+              <span>*</span>
+            </label>
+
+            <input
+              id="nickname"
+              name="nickname"
+              type="text"
+              autocomplete="off"
+              placeholder="例如：小美、寶貝、阿哲"
+              maxlength="30"
+              required
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label for="birthdayDate">
+              生日日期
+              <span>*</span>
+            </label>
+
+            <input
+              id="birthdayDate"
+              name="birthdayDate"
+              type="date"
+              required
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              遊戲模式
+              <span>*</span>
+            </label>
+
+            <div class="choice-grid">
+
+              <label class="choice-card">
+
+                <input
+                  type="radio"
+                  name="gameMode"
+                  value="暖心模式"
+                  required
+                >
+
+                <div class="choice-content">
+
+                  <div class="choice-icon">
+                    🥰
+                  </div>
+
+                  <strong>
+                    暖心模式
+                  </strong>
+
+                  <small>
+                    溫柔、有感情，
+                    適合情侶與家人
+                  </small>
+
+                </div>
+
+              </label>
+
+
+              <label class="choice-card">
+
+                <input
+                  type="radio"
+                  name="gameMode"
+                  value="嘴砲模式"
+                >
+
+                <div class="choice-content">
+
+                  <div class="choice-icon">
+                    😂
+                  </div>
+
+                  <strong>
+                    嘴砲模式
+                  </strong>
+
+                  <small>
+                    有梗、有吐槽，
+                    適合好友與情侶
+                  </small>
+
+                </div>
+
+              </label>
+
+
+              <label class="choice-card">
+
+                <input
+                  type="radio"
+                  name="gameMode"
+                  value="地獄模式"
+                >
+
+                <div class="choice-content">
+
+                  <div class="choice-icon">
+                    😈
+                  </div>
+
+                  <strong>
+                    地獄模式
+                  </strong>
+
+                  <small>
+                    吐槽火力全開，
+                    心臟強一點再選
+                  </small>
+
+                </div>
+
+              </label>
+
+            </div>
+
+          </div>
+
+
+          <div class="time-grid">
+
+            <div class="field">
+
+              <label for="unlockTime">
+                遊戲解鎖時間
+                <span>*</span>
+              </label>
+
+              <input
+                id="unlockTime"
+                name="unlockTime"
+                type="time"
+                value="00:00"
+                required
+              >
+
+              <div class="help">
+                預設生日當天 00:00 開放。
+              </div>
+
+            </div>
+
+
+            <div class="field">
+
+              <label for="rescueTime">
+                人道救援時間
+                <span>*</span>
+              </label>
+
+              <input
+                id="rescueTime"
+                name="rescueTime"
+                type="time"
+                value="22:00"
+                required
+              >
+
+              <div class="help">
+                到達此時間仍未完成，
+                可選擇直接公布禮物位置。
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- STEP 02 -->
+      <section
+        class="form-step"
+        data-step="2"
+      >
+
+        <div class="section-heading">
+
+          <span class="section-number">
+            02
+          </span>
+
+          <div>
+
+            <h2>
+              設定四個 Mission
+            </h2>
+
+            <p>
+              每一關都會搭配一張實體 Mission Card。
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="missionsContainer"
+          class="missions"
+        ></div>
+
+      </section>
+
+
+      <!-- STEP 03 -->
+      <section
+        class="form-step"
+        data-step="3"
+      >
+
+        <div class="section-heading">
+
+          <span class="section-number">
+            03
+          </span>
+
+          <div>
+
+            <h2>
+              最終生日禮物
+            </h2>
+
+            <p>
+              四個 Mission 完成後，
+              壽星才會看到這裡的內容。
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-card">
+
+          <div class="field">
+
+            <label for="giftLocation">
+              最終禮物位置
+              <span>*</span>
+            </label>
+
+            <textarea
+              id="giftLocation"
+              name="giftLocation"
+              rows="4"
+              maxlength="300"
+              placeholder="例如：衣櫃最上層的黑色袋子裡。"
+              required
+            ></textarea>
+
+            <div class="help">
+              此位置在正常破關或啟動人道救援以前，
+              不會顯示給壽星。
+            </div>
+
+          </div>
+
+
+          <div class="field">
+
+            <label for="completionBlessing">
+              破關祝福
+              <span>*</span>
+            </label>
+
+            <textarea
+              id="completionBlessing"
+              name="completionBlessing"
+              rows="6"
+              maxlength="800"
+              placeholder="例如：你真的找到啦 ❤️ 希望今天除了收到禮物，也多了一段值得記住的回憶。"
+              required
+            ></textarea>
+
+            <div class="help">
+              這段文字會在找到最終生日禮物時顯示。
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- STEP 04 -->
+      <section
+        class="form-step"
+        data-step="4"
+      >
+
+        <div class="section-heading">
+
+          <span class="section-number">
+            04
+          </span>
+
+          <div>
+
+            <h2>
+              永久電子生日卡
+            </h2>
+
+            <p>
+              遊戲完成後，
+              同一張 NFC 將永久變成這張生日卡。
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-card">
+
+          <div class="field">
+
+            <label for="cardTitle">
+              卡片標題
+              <span>*</span>
+            </label>
+
+            <input
+              id="cardTitle"
+              name="cardTitle"
+              type="text"
+              value="HAPPY BIRTHDAY"
+              maxlength="60"
+              required
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label for="cardSubtitle">
+              卡片副標題
+              <span>*</span>
+            </label>
+
+            <input
+              id="cardSubtitle"
+              name="cardSubtitle"
+              type="text"
+              placeholder="例如：給最特別的妳"
+              maxlength="80"
+              required
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label for="cardMessage">
+              生日祝福
+              <span>*</span>
+            </label>
+
+            <textarea
+              id="cardMessage"
+              name="cardMessage"
+              rows="8"
+              maxlength="1500"
+              placeholder="寫下一段想永久留給壽星的話……"
+              required
+            ></textarea>
+
+          </div>
+
+
+          <div class="field">
+
+            <label for="cardSignature">
+              署名
+              <span>*</span>
+            </label>
+
+            <input
+              id="cardSignature"
+              name="cardSignature"
+              type="text"
+              placeholder="例如：FROM JAY"
+              maxlength="80"
+              required
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label for="cardPhoto">
+              生日卡照片
+              <span>*</span>
+            </label>
+
+            <label
+              class="upload-box"
+              for="cardPhoto"
+            >
+
+              <input
+                id="cardPhoto"
+                name="cardPhoto"
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                required
+              >
+
+              <div
+                id="uploadEmpty"
+                class="upload-empty"
+              >
+
+                <div class="upload-icon">
+                  ＋
+                </div>
+
+                <strong>
+                  選擇一張照片
+                </strong>
+
+                <span>
+                  JPG / PNG / WEBP
+                </span>
+
+              </div>
+
+
+              <img
+                id="photoPreview"
+                class="photo-preview"
+                alt="生日卡照片預覽"
+                hidden
+              >
+
+            </label>
+
+            <div class="help">
+              建議使用清楚的原始照片。
+              此階段只做預覽，正式上傳會在 Phase 03-D 接上。
+            </div>
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              生日卡模板
+              <span>*</span>
+            </label>
+
+            <div class="template-grid">
+
+              <label class="template-card">
+
+                <input
+                  type="radio"
+                  name="cardTemplate"
+                  value="精品黑"
+                  required
+                >
+
+                <div class="template-preview template-dark">
+                  HAPPY
+                  <span>BIRTHDAY</span>
+                </div>
+
+                <strong>
+                  精品黑
+                </strong>
+
+              </label>
+
+
+              <label class="template-card">
+
+                <input
+                  type="radio"
+                  name="cardTemplate"
+                  value="奶油白"
+                >
+
+                <div class="template-preview template-cream">
+                  HAPPY
+                  <span>BIRTHDAY</span>
+                </div>
+
+                <strong>
+                  奶油白
+                </strong>
+
+              </label>
+
+
+              <label class="template-card">
+
+                <input
+                  type="radio"
+                  name="cardTemplate"
+                  value="浪漫暖色"
+                >
+
+                <div class="template-preview template-warm">
+                  HAPPY
+                  <span>BIRTHDAY</span>
+                </div>
+
+                <strong>
+                  浪漫暖色
+                </strong>
+
+              </label>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </form>
+
+
+    <div class="form-nav">
+
+      <button
+        id="backBtn"
+        class="secondary-btn"
+        type="button"
+      >
+        上一步
+      </button>
+
+      <button
+        id="nextBtn"
+        class="primary-btn"
+        type="button"
+      >
+        下一步
+      </button>
+
+    </div>
+
+
+    <div class="autosave-note">
+      ✓ 文字內容會自動暫存在此裝置
     </div>
 
   </main>
 
 
+  <div
+    id="toast"
+    class="toast"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+
   <script src="../assets/js/config.js"></script>
-
-  <script>
-
-    const result =
-      document.getElementById('result');
-
-    const getBtn =
-      document.getElementById('getBtn');
-
-    const postBtn =
-      document.getElementById('postBtn');
-
-
-    function showLoading(text) {
-
-      result.className = 'result';
-
-      result.textContent = text;
-
-    }
-
-
-    function showSuccess(data) {
-
-      result.className =
-        'result ok';
-
-      result.textContent =
-        JSON.stringify(
-          data,
-          null,
-          2
-        );
-
-    }
-
-
-    function showError(error) {
-
-      console.error(error);
-
-      result.className =
-        'result error';
-
-      result.textContent =
-        '連線失敗：\n' +
-        (
-          error?.message ||
-          String(error)
-        );
-
-    }
-
-
-    getBtn.addEventListener(
-      'click',
-      async () => {
-
-        getBtn.disabled = true;
-
-        showLoading(
-          'GET 連線中...'
-        );
-
-        try {
-
-          const url =
-            BM_CONFIG.API_URL +
-            '?action=ping&_=' +
-            Date.now();
-
-          const response =
-            await fetch(
-              url,
-              {
-                method: 'GET',
-                redirect: 'follow',
-                cache: 'no-store'
-              }
-            );
-
-          if (!response.ok) {
-            throw new Error(
-              'HTTP ' +
-              response.status
-            );
-          }
-
-          const data =
-            await response.json();
-
-          if (
-            data.ok !== true ||
-            data.action !== 'ping'
-          ) {
-            throw new Error(
-              'GET 回傳內容不正確'
-            );
-          }
-
-          showSuccess({
-            test: 'GET PASS',
-            ...data
-          });
-
-        } catch (error) {
-
-          showError(error);
-
-        } finally {
-
-          getBtn.disabled = false;
-
-        }
-
-      }
-    );
-
-
-    postBtn.addEventListener(
-      'click',
-      async () => {
-
-        postBtn.disabled = true;
-
-        showLoading(
-          'POST 連線中...'
-        );
-
-        try {
-
-          const response =
-            await fetch(
-              BM_CONFIG.API_URL,
-              {
-
-                method: 'POST',
-
-                redirect: 'follow',
-
-                headers: {
-                  'Content-Type':
-                    'text/plain;charset=utf-8'
-                },
-
-                body:
-                  JSON.stringify({
-                    action:
-                      'pingPost',
-
-                    test:
-                      'github-pages'
-                  })
-
-              }
-            );
-
-          if (!response.ok) {
-            throw new Error(
-              'HTTP ' +
-              response.status
-            );
-          }
-
-          const data =
-            await response.json();
-
-          if (
-            data.ok !== true ||
-            data.action !==
-              'pingPost'
-          ) {
-            throw new Error(
-              'POST 回傳內容不正確'
-            );
-          }
-
-          showSuccess({
-            test: 'POST PASS',
-            ...data
-          });
-
-        } catch (error) {
-
-          showError(error);
-
-        } finally {
-
-          postBtn.disabled = false;
-
-        }
-
-      }
-    );
-
-  </script>
+  <script src="../assets/js/setup.js"></script>
 
 </body>
 </html>
