@@ -153,6 +153,39 @@ const finalAgreement =
     'finalAgreement'
   );
 
+const creationSuccessPage =
+  document.getElementById(
+    'creationSuccessPage'
+  );
+
+
+const successGameId =
+  document.getElementById(
+    'successGameId'
+  );
+
+
+const successGameUrl =
+  document.getElementById(
+    'successGameUrl'
+  );
+
+
+const successMissionCards =
+  document.getElementById(
+    'successMissionCards'
+  );
+
+
+const copyGameUrlBtn =
+  document.getElementById(
+    'copyGameUrlBtn'
+  );
+
+
+let isSubmitting =
+  false;
+
 
 /* ======================================
  * INIT
