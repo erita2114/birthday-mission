@@ -42,14 +42,6 @@ const previewCardBtn = document.getElementById('previewCardBtn');
 const previewCardRestartBtn = document.getElementById('previewCardRestartBtn');
 const toast = document.getElementById('toast');
 
-/* Phase 07-3: Preview Report 強制事件代理，避免單一按鈕綁定失效 */
-document.addEventListener('click', event => {
-  const button = event.target.closest?.('#previewReportBtn');
-  if (!button) return;
-  event.preventDefault();
-  openPreviewReport();
-});
-
 init();
 
 async function init() {
@@ -78,6 +70,7 @@ function bindEvents() {
   normalReportBtn.addEventListener('click', openFormalReport);
   rescueReportBtn.addEventListener('click', openFormalReport);
   previewRevealBtn.addEventListener('click', handlePreviewRevealGift);
+  previewReportBtn.addEventListener('click', openPreviewReport);
   unlockCardBtn.addEventListener('click', handleUnlockPermanentCard);
   previewCardBtn.addEventListener('click', handlePreviewCard);
   restartPreviewBtn.addEventListener('click', restartPreview);
@@ -434,44 +427,17 @@ function openFormalReport() {
 }
 
 function openPreviewReport() {
-  try {
-    const requiredIds = [
-      'reportScreen',
-      'reportMissions',
-      'reportTime',
-      'reportPeek',
-      'reportHints',
-      'reportWrong',
-      'reportCodeWrong',
-      'reportModeBadge',
-      'reportIntro',
-      'previewReportNote',
-      'unlockCardBtn',
-      'previewCardBtn',
-    ];
-
-    const missing = requiredIds.filter(id => !document.getElementById(id));
-
-    if (missing.length) {
-      throw new Error('Phase 07 HTML 缺少：' + missing.join(', '));
-    }
-
-    renderReport({
-      missionsCompleted: previewTotalStage,
-      totalMissions: previewTotalStage,
-      elapsedMinutes: null,
-      peekCount: null,
-      hintUsed: null,
-      hintWrong: null,
-      codeWrong: null,
-      rescueUsed: false,
-      completionMethod: 'PREVIEW',
-    }, true);
-
-  } catch (error) {
-    console.error('Preview Report Error:', error);
-    alert('Preview 任務報告錯誤：\n' + (error.message || String(error)));
-  }
+  renderReport({
+    missionsCompleted: previewTotalStage,
+    totalMissions: previewTotalStage,
+    elapsedMinutes: null,
+    peekCount: null,
+    hintUsed: null,
+    hintWrong: null,
+    codeWrong: null,
+    rescueUsed: false,
+    completionMethod: 'PREVIEW',
+  }, true);
 }
 
 function renderReport(report, preview) {
@@ -572,16 +538,7 @@ function renderBirthdayCard(data, preview) {
   document.getElementById('cardMessage').textContent = card.message || '';
   document.getElementById('cardSignature').textContent = card.signature || '';
 
-  if (card.photoUrl) {
-    photoWrap.hidden = false;
-    photo.src = card.photoUrl;
-    photo.onerror = () => {
-      photoWrap.hidden = true;
-    };
-  } else {
-    photoWrap.hidden = true;
-    photo.removeAttribute('src');
-  }
+  loadBirthdayCardPhoto_(photo, photoWrap, card.photoUrl);
 
   const heading = document.getElementById('permanentCardHeading');
   const text = document.getElementById('permanentCardText');
@@ -597,6 +554,149 @@ function renderBirthdayCard(data, preview) {
   }
 
   showScreen('birthdayCardScreen');
+}
+
+function loadBirthdayCardPhoto_(photo, photoWrap, rawUrl) {
+  const sourceUrl = String(rawUrl || '').trim();
+
+  photo.onload = null;
+  photo.onerror = null;
+  photo.removeAttribute('src');
+  photoWrap.hidden = true;
+  photoWrap.classList.remove('photo-load-error');
+
+  if (!sourceUrl) {
+    return;
+  }
+
+  const candidates = buildBirthdayPhotoCandidates_(sourceUrl);
+  let index = 0;
+
+  const tryNext = () => {
+    if (index >= candidates.length) {
+      photo.onerror = null;
+      photo.removeAttribute('src');
+      photoWrap.hidden = false;
+      photoWrap.classList.add('photo-load-error');
+      return;
+    }
+
+    photoWrap.hidden = false;
+    photoWrap.classList.remove('photo-load-error');
+
+    photo.onload = () => {
+      photoWrap.hidden = false;
+      photoWrap.classList.remove('photo-load-error');
+    };
+
+    photo.onerror = () => {
+      index += 1;
+      tryNext();
+    };
+
+    photo.src = candidates[index];
+  };
+
+  tryNext();
+}
+
+function buildBirthdayPhotoCandidates_(rawUrl) {
+  const original = String(rawUrl || '').trim();
+  const candidates = [];
+
+  const pushUnique = value => {
+    const url = String(value || '').trim();
+    if (url && !candidates.includes(url)) {
+      candidates.push(url);
+    }
+  };
+
+  const driveInfo = extractDrivePhotoInfo_(original);
+
+  if (driveInfo.fileId) {
+    let thumbnail =
+      'https://drive.google.com/thumbnail?id=' +
+      encodeURIComponent(driveInfo.fileId) +
+      '&sz=w1600';
+
+    if (driveInfo.resourceKey) {
+      thumbnail +=
+        '&resourcekey=' +
+        encodeURIComponent(driveInfo.resourceKey);
+    }
+
+    pushUnique(thumbnail);
+
+    let uc =
+      'https://drive.google.com/uc?export=view&id=' +
+      encodeURIComponent(driveInfo.fileId);
+
+    if (driveInfo.resourceKey) {
+      uc +=
+        '&resourcekey=' +
+        encodeURIComponent(driveInfo.resourceKey);
+    }
+
+    pushUnique(uc);
+
+    pushUnique(
+      'https://lh3.googleusercontent.com/d/' +
+      encodeURIComponent(driveInfo.fileId) +
+      '=w1600'
+    );
+  }
+
+  pushUnique(original);
+
+  return candidates;
+}
+
+function extractDrivePhotoInfo_(url) {
+  const text = String(url || '').trim();
+  let fileId = '';
+  let resourceKey = '';
+
+  try {
+    const parsed = new URL(text);
+    resourceKey = parsed.searchParams.get('resourcekey') || '';
+
+    if (
+      parsed.hostname === 'drive.google.com' ||
+      parsed.hostname.endsWith('.googleusercontent.com')
+    ) {
+      fileId =
+        parsed.searchParams.get('id') ||
+        '';
+
+      if (!fileId) {
+        const match =
+          parsed.pathname.match(/\/d\/([a-zA-Z0-9_-]+)/);
+
+        if (match) {
+          fileId = match[1];
+        }
+      }
+    }
+  } catch (ignore) {
+    const idMatch =
+      text.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+
+    if (idMatch) {
+      fileId = idMatch[1];
+    }
+
+    const resourceMatch =
+      text.match(/[?&]resourcekey=([^&]+)/);
+
+    if (resourceMatch) {
+      resourceKey = decodeURIComponent(resourceMatch[1]);
+    }
+  }
+
+  return {
+    fileId,
+    resourceKey,
+  };
 }
 
 function getTemplateClass(template) {
