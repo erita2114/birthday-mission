@@ -42,6 +42,14 @@ const previewCardBtn = document.getElementById('previewCardBtn');
 const previewCardRestartBtn = document.getElementById('previewCardRestartBtn');
 const toast = document.getElementById('toast');
 
+/* Phase 07-3: Preview Report 強制事件代理，避免單一按鈕綁定失效 */
+document.addEventListener('click', event => {
+  const button = event.target.closest?.('#previewReportBtn');
+  if (!button) return;
+  event.preventDefault();
+  openPreviewReport();
+});
+
 init();
 
 async function init() {
@@ -70,7 +78,6 @@ function bindEvents() {
   normalReportBtn.addEventListener('click', openFormalReport);
   rescueReportBtn.addEventListener('click', openFormalReport);
   previewRevealBtn.addEventListener('click', handlePreviewRevealGift);
-  previewReportBtn.addEventListener('click', openPreviewReport);
   unlockCardBtn.addEventListener('click', handleUnlockPermanentCard);
   previewCardBtn.addEventListener('click', handlePreviewCard);
   restartPreviewBtn.addEventListener('click', restartPreview);
@@ -427,17 +434,44 @@ function openFormalReport() {
 }
 
 function openPreviewReport() {
-  renderReport({
-    missionsCompleted: previewTotalStage,
-    totalMissions: previewTotalStage,
-    elapsedMinutes: null,
-    peekCount: null,
-    hintUsed: null,
-    hintWrong: null,
-    codeWrong: null,
-    rescueUsed: false,
-    completionMethod: 'PREVIEW',
-  }, true);
+  try {
+    const requiredIds = [
+      'reportScreen',
+      'reportMissions',
+      'reportTime',
+      'reportPeek',
+      'reportHints',
+      'reportWrong',
+      'reportCodeWrong',
+      'reportModeBadge',
+      'reportIntro',
+      'previewReportNote',
+      'unlockCardBtn',
+      'previewCardBtn',
+    ];
+
+    const missing = requiredIds.filter(id => !document.getElementById(id));
+
+    if (missing.length) {
+      throw new Error('Phase 07 HTML 缺少：' + missing.join(', '));
+    }
+
+    renderReport({
+      missionsCompleted: previewTotalStage,
+      totalMissions: previewTotalStage,
+      elapsedMinutes: null,
+      peekCount: null,
+      hintUsed: null,
+      hintWrong: null,
+      codeWrong: null,
+      rescueUsed: false,
+      completionMethod: 'PREVIEW',
+    }, true);
+
+  } catch (error) {
+    console.error('Preview Report Error:', error);
+    alert('Preview 任務報告錯誤：\n' + (error.message || String(error)));
+  }
 }
 
 function renderReport(report, preview) {
