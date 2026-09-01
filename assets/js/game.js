@@ -568,6 +568,8 @@ function loadBirthdayCardPhoto_(photo, photoWrap, rawUrl) {
   photo.removeAttribute('src');
   photoWrap.hidden = true;
   photoWrap.classList.remove('photo-load-error');
+  photoWrap.style.removeProperty('--photo-image');
+  photoWrap.style.removeProperty('--photo-ratio');
 
   if (!sourceUrl) {
     return;
@@ -582,13 +584,48 @@ function loadBirthdayCardPhoto_(photo, photoWrap, rawUrl) {
       photo.removeAttribute('src');
       photoWrap.hidden = false;
       photoWrap.classList.add('photo-load-error');
+      photoWrap.style.removeProperty('--photo-image');
+      photoWrap.style.removeProperty('--photo-ratio');
       return;
     }
+
+    const currentUrl = candidates[index];
 
     photoWrap.hidden = false;
     photoWrap.classList.remove('photo-load-error');
 
     photo.onload = () => {
+      const naturalWidth = Number(photo.naturalWidth || 0);
+      const naturalHeight = Number(photo.naturalHeight || 0);
+
+      if (naturalWidth > 0 && naturalHeight > 0) {
+        const rawRatio = naturalWidth / naturalHeight;
+
+        /*
+         * 生日卡照片區依照原圖比例自動調整。
+         * 一般照片完全照原比例；只有極端長圖／超寬圖才限制外框比例，
+         * 但前景仍使用 contain，因此內容依然不會被裁切。
+         */
+        const displayRatio = Math.min(
+          1.85,
+          Math.max(0.62, rawRatio)
+        );
+
+        photoWrap.style.setProperty(
+          '--photo-ratio',
+          String(displayRatio)
+        );
+      }
+
+      /*
+       * 背景使用同一張照片做柔焦延伸，
+       * 前景照片保持完整比例，不裁人物、不裁文字。
+       */
+      photoWrap.style.setProperty(
+        '--photo-image',
+        `url("${currentUrl.replace(/"/g, '\"')}")`
+      );
+
       photoWrap.hidden = false;
       photoWrap.classList.remove('photo-load-error');
     };
@@ -598,7 +635,7 @@ function loadBirthdayCardPhoto_(photo, photoWrap, rawUrl) {
       tryNext();
     };
 
-    photo.src = candidates[index];
+    photo.src = currentUrl;
   };
 
   tryNext();
