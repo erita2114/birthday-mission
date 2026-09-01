@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b0b0a">
   <title>Birthday Mission</title>
-  <link rel="stylesheet" href="../assets/css/game.css?v=phase08-02-ceremony-1">
+  <link rel="stylesheet" href="../assets/css/game.css?v=phase08-03-mode-1">
 </head>
 <body>
 
@@ -23,6 +23,14 @@
       <span>PRIVATE ACCESS</span>
     </div>
   </header>
+
+  <div id="modeBadge" class="mode-badge" hidden>
+    <div>
+      <span id="modeBadgeCode">HEART MODE</span>
+      <strong id="modeBadgeLabel">暖心模式</strong>
+    </div>
+    <small id="modeBadgeTagline">有人把想說的話，藏進了每一關。</small>
+  </div>
 
   <section id="loadingScreen" class="screen active">
     <div class="center-screen">
@@ -65,8 +73,8 @@
     <div class="center-screen">
       <div class="micro-label">ACCESS DENIED</div>
       <div class="locked-seal">LOCKED</div>
-      <h1>抓到偷跑仔</h1>
-      <p><span id="lockedNickname"></span> 的 Birthday Mission 還沒到開放時間。</p>
+      <h1 id="lockedTitle">抓到偷跑仔</h1>
+      <p id="lockedDescription"><span id="lockedNickname"></span> 的 Birthday Mission 還沒到開放時間。</p>
       <div class="countdown">
         <div><strong id="countDays">00</strong><span>DAYS</span></div>
         <div><strong id="countHours">00</strong><span>HOURS</span></div>
@@ -81,8 +89,8 @@
       <div class="access-granted">ACCESS GRANTED</div>
       <div class="intro-line"></div>
       <div class="micro-label">PRIVATE BIRTHDAY MISSION</div>
-      <h1>今天的生日禮物，好像沒有打算直接給你。</h1>
-      <p>有人替你準備了一場 Birthday Mission。找到所有實體任務卡，才能知道真正的生日禮物在哪裡。</p>
+      <h1 id="readyTitle">今天的生日禮物，好像沒有打算直接給你。</h1>
+      <p id="readyDescription">有人替你準備了一場 Birthday Mission。找到所有實體任務卡，才能知道真正的生日禮物在哪裡。</p>
       <div class="ready-meta">
         <div><span>PLAYER</span><strong id="readyNickname">—</strong></div>
         <div><span>MISSIONS</span><strong id="readyMissionCount">—</strong></div>
@@ -94,7 +102,7 @@
   <section id="missionScreen" class="screen">
     <div class="mission-top">
       <div>
-        <div class="micro-label">YOUR NEXT CLUE</div>
+        <div id="missionEyebrow" class="micro-label">YOUR NEXT CLUE</div>
         <h2 id="missionTitle">MISSION 01</h2>
       </div>
       <div id="missionCounter" class="mission-counter">1 / 4</div>
@@ -109,10 +117,10 @@
 
     <section class="mission-action-card">
       <div class="action-heading">
-        <div><span>NEED A HINT?</span><h3>找不到 Mission Card？</h3></div>
+        <div><span id="hintEyebrow">NEED A HINT?</span><h3 id="hintHeading">找不到 Mission Card？</h3></div>
         <div class="action-number">?</div>
       </div>
-      <p class="action-description">回答一個只有你們知道的問題，答對後會得到額外提示。</p>
+      <p id="hintDescription" class="action-description">回答一個只有你們知道的問題，答對後會得到額外提示。</p>
       <div class="hint-question"><span>QUESTION</span><p id="hintQuestion">—</p></div>
       <div class="input-action">
         <input id="hintAnswerInput" type="text" maxlength="100" autocomplete="off" placeholder="輸入你的答案">
@@ -126,10 +134,10 @@
 
     <section class="mission-action-card">
       <div class="action-heading">
-        <div><span>MISSION CARD</span><h3>找到實體任務卡了嗎？</h3></div>
+        <div><span id="cardEyebrow">MISSION CARD</span><h3 id="missionCardHeading">找到實體任務卡了嗎？</h3></div>
         <div class="action-number">#</div>
       </div>
-      <p class="action-description">輸入 Mission Card 上的 4 位數密碼，驗證成功才能進入下一關。</p>
+      <p id="missionCardDescription" class="action-description">輸入 Mission Card 上的 4 位數密碼，驗證成功才能進入下一關。</p>
       <div class="code-input-area">
         <input id="missionCodeInput" class="mission-code-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" placeholder="0000">
         <button id="missionUnlockBtn" class="main-btn" type="button">驗證 Mission Card</button>
@@ -152,12 +160,12 @@
     <div class="center-screen">
       <div class="complete-ring">✓</div>
       <div class="micro-label">ALL MISSIONS COMPLETE</div>
-      <h1>你真的全部找到了。</h1>
-      <p>所有 Birthday Mission 已經完成。現在，只剩最後一件事。</p>
+      <h1 id="allCompleteTitle">你真的全部找到了。</h1>
+      <p id="allCompleteDescription">所有 Birthday Mission 已經完成。現在，只剩最後一件事。</p>
       <div class="final-access-card">
         <span>FINAL ACCESS</span>
-        <strong>最後的生日禮物已經解鎖</strong>
-        <p>準備好之後，親手揭曉今天真正的生日驚喜。</p>
+        <strong id="finalAccessTitle">最後的生日禮物已經解鎖</strong>
+        <p id="finalAccessDescription">準備好之後，親手揭曉今天真正的生日驚喜。</p>
       </div>
       <button id="revealGiftBtn" class="final-reveal-btn" type="button">揭曉我的生日禮物</button>
     </div>
@@ -167,8 +175,8 @@
     <div class="gift-reveal">
       <div class="gift-symbol">✦</div>
       <div class="micro-label">MISSION REWARD UNLOCKED</div>
-      <h1>找到了。</h1>
-      <p class="gift-intro">這就是有人一路讓你找了這麼久，最後想帶你來到的地方。</p>
+      <h1 id="giftRevealTitle">找到了。</h1>
+      <p id="giftRevealIntro" class="gift-intro">這就是有人一路讓你找了這麼久，最後想帶你來到的地方。</p>
       <div class="gift-location-card">
         <span>YOUR BIRTHDAY GIFT</span>
         <strong id="giftLocation">—</strong>
@@ -185,8 +193,8 @@
     <div class="center-screen rescue-success-content">
       <div class="micro-label">HUMANITARIAN RESCUE</div>
       <div class="rescue-seal">SOS</div>
-      <h1>好啦，救你一次。</h1>
-      <p>看來 Birthday Mission 今天真的把你難住了。</p>
+      <h1 id="rescueSuccessTitle">好啦，救你一次。</h1>
+      <p id="rescueSuccessDescription">看來 Birthday Mission 今天真的把你難住了。</p>
       <div class="gift-location-card">
         <span>YOUR BIRTHDAY GIFT</span>
         <strong id="rescueGiftLocation">—</strong>
@@ -203,7 +211,7 @@
   <section id="reportScreen" class="screen">
     <div class="report-page">
       <div class="micro-label">MISSION REPORT</div>
-      <h1>你的生日任務報告</h1>
+      <h1 id="reportTitle">你的生日任務報告</h1>
       <p id="reportIntro" class="report-intro">今天這場 Birthday Mission，留下了一些紀錄。</p>
 
       <div id="reportModeBadge" class="report-mode-badge">MISSION COMPLETE</div>
@@ -306,6 +314,6 @@
 <div id="toast" class="toast"></div>
 
 <script src="../assets/js/config.js"></script>
-<script src="../assets/js/game.js?v=phase08-02-ceremony-1"></script>
+<script src="../assets/js/game.js?v=phase08-03-mode-1"></script>
 </body>
 </html>
