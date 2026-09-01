@@ -2429,3 +2429,123 @@ input:checked
   line-height: 1.7;
 
 }
+
+/* ===============================
+   ORDER APPROVAL STATUS
+   =============================== */
+
+
+.order-status-box {
+
+  display: flex;
+
+  align-items:
+    flex-start;
+
+  gap: 13px;
+
+  margin-bottom: 22px;
+
+  padding:
+    17px 18px;
+
+  border:
+    1px solid
+    #dccba8;
+
+  border-radius:
+    16px;
+
+  background:
+    #f8f3e8;
+
+}
+
+
+.order-status-dot {
+
+  width: 10px;
+
+  height: 10px;
+
+  flex:
+    0 0 auto;
+
+  margin-top: 6px;
+
+  border-radius: 50%;
+
+  background:
+    #b28a3d;
+
+}
+
+
+.order-status-box strong {
+
+  display: block;
+
+  margin-bottom: 5px;
+
+  font-size: 13px;
+
+}
+
+
+.order-status-box p {
+
+  margin: 0;
+
+  color:
+    #786a4e;
+
+  font-size: 11px;
+
+  line-height: 1.7;
+
+}
+
+
+/* ===============================
+   PREVIEW INFO
+   =============================== */
+
+
+.preview-note {
+
+  margin-top: 16px;
+
+  padding:
+    15px 16px;
+
+  border-radius: 13px;
+
+  background:
+    #f1efe9;
+
+}
+
+
+.preview-note strong {
+
+  display: block;
+
+  margin-bottom: 5px;
+
+  font-size: 12px;
+
+}
+
+
+.preview-note p {
+
+  margin: 0;
+
+  color:
+    var(--muted);
+
+  font-size: 11px;
+
+  line-height: 1.7;
+
+}
