@@ -1,946 +1,301 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
-
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1"
-  >
-
-  <meta
-    name="theme-color"
-    content="#101010"
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101010">
   <title>Birthday Mission</title>
-
-  <link
-  rel="stylesheet"
-  href="../assets/css/game.css?v=phase06-2"
->
-
+  <link rel="stylesheet" href="../assets/css/game.css?v=phase07-1">
 </head>
-
-
 <body>
 
-
-<!-- PREVIEW -->
-
-<div
-  id="previewBanner"
-  class="preview-banner"
-  hidden
->
-
-  <strong>
-    PREVIEW MODE
-  </strong>
-
-  <span>
-    安全測試模式｜不影響正式遊戲進度
-  </span>
-
+<div id="previewBanner" class="preview-banner" hidden>
+  <strong>PREVIEW MODE</strong>
+  <span>安全測試模式｜不影響正式遊戲進度</span>
 </div>
-
-
 
 <main class="game-shell">
 
-
-  <!-- BRAND -->
-
   <header class="game-brand">
-
-    <div class="brand-code">
-      BM
-    </div>
-
+    <div class="brand-code">BM</div>
     <div>
-
-      <strong>
-        BIRTHDAY MISSION
-      </strong>
-
-      <span>
-        PRIVATE ACCESS
-      </span>
-
+      <strong>BIRTHDAY MISSION</strong>
+      <span>PRIVATE ACCESS</span>
     </div>
-
   </header>
 
-
-
-  <!-- LOADING -->
-
-  <section
-    id="loadingScreen"
-    class="screen active"
-  >
-
+  <section id="loadingScreen" class="screen active">
     <div class="center-screen">
-
       <div class="loading-ring"></div>
-
-      <div class="micro-label">
-        VERIFYING ACCESS
-      </div>
-
-      <h1>
-        Birthday Mission
-      </h1>
-
-      <p>
-        正在確認生日任務資料…
-      </p>
-
+      <div class="micro-label">VERIFYING ACCESS</div>
+      <h1>Birthday Mission</h1>
+      <p>正在確認生日任務資料…</p>
     </div>
-
   </section>
 
-
-
-  <!-- WAITING -->
-
-  <section
-    id="waitingScreen"
-    class="screen"
-  >
-
+  <section id="waitingScreen" class="screen">
     <div class="center-screen">
-
-      <div class="status-icon">
-        ···
-      </div>
-
-      <div class="micro-label">
-        ORDER VERIFICATION
-      </div>
-
-      <h1>
-        任務準備中
-      </h1>
-
-      <p>
-        Birthday Mission 已建立，
-        目前正在等待賣家確認訂單。
-      </p>
-
-      <div class="info-box">
-        訂單確認完成後，
-        Birthday Mission 將自動開放。
-      </div>
-
+      <div class="status-icon">···</div>
+      <div class="micro-label">ORDER VERIFICATION</div>
+      <h1>任務準備中</h1>
+      <p>Birthday Mission 已建立，目前正在等待賣家確認訂單。</p>
+      <div class="info-box">訂單確認完成後，Birthday Mission 將自動開放。</div>
     </div>
-
   </section>
 
-
-
-  <!-- DISABLED -->
-
-  <section
-    id="disabledScreen"
-    class="screen"
-  >
-
+  <section id="disabledScreen" class="screen">
     <div class="center-screen">
-
-      <div class="status-icon">
-        ×
-      </div>
-
-      <div class="micro-label">
-        ACCESS DISABLED
-      </div>
-
-      <h1>
-        此任務目前無法使用
-      </h1>
-
-      <p>
-        如有疑問，
-        請聯絡 Birthday Mission 賣家。
-      </p>
-
+      <div class="status-icon">×</div>
+      <div class="micro-label">ACCESS DISABLED</div>
+      <h1>此任務目前無法使用</h1>
+      <p>如有疑問，請聯絡 Birthday Mission 賣家。</p>
     </div>
-
   </section>
 
-
-
-  <!-- ERROR -->
-
-  <section
-    id="errorScreen"
-    class="screen"
-  >
-
+  <section id="errorScreen" class="screen">
     <div class="center-screen">
-
-      <div class="status-icon">
-        !
-      </div>
-
-      <div class="micro-label">
-        ACCESS ERROR
-      </div>
-
-      <h1>
-        找不到生日任務
-      </h1>
-
-      <p id="errorMessage">
-        請確認網址是否正確。
-      </p>
-
+      <div class="status-icon">!</div>
+      <div class="micro-label">ACCESS ERROR</div>
+      <h1>找不到生日任務</h1>
+      <p id="errorMessage">請確認網址是否正確。</p>
     </div>
-
   </section>
 
-
-
-  <!-- LOCKED -->
-
-  <section
-    id="lockedScreen"
-    class="screen"
-  >
-
+  <section id="lockedScreen" class="screen">
     <div class="center-screen">
-
-      <div class="micro-label">
-        ACCESS DENIED
-      </div>
-
-      <div class="locked-emoji">
-        🚨
-      </div>
-
-      <h1>
-        抓到偷跑仔
-      </h1>
-
-      <p>
-        <span id="lockedNickname"></span>
-        的 Birthday Mission
-        還沒到開放時間。
-      </p>
-
-
+      <div class="micro-label">ACCESS DENIED</div>
+      <div class="locked-emoji">🚨</div>
+      <h1>抓到偷跑仔</h1>
+      <p><span id="lockedNickname"></span> 的 Birthday Mission 還沒到開放時間。</p>
       <div class="countdown">
-
-        <div>
-          <strong id="countDays">00</strong>
-          <span>DAYS</span>
-        </div>
-
-        <div>
-          <strong id="countHours">00</strong>
-          <span>HOURS</span>
-        </div>
-
-        <div>
-          <strong id="countMinutes">00</strong>
-          <span>MIN</span>
-        </div>
-
-        <div>
-          <strong id="countSeconds">00</strong>
-          <span>SEC</span>
-        </div>
-
+        <div><strong id="countDays">00</strong><span>DAYS</span></div>
+        <div><strong id="countHours">00</strong><span>HOURS</span></div>
+        <div><strong id="countMinutes">00</strong><span>MIN</span></div>
+        <div><strong id="countSeconds">00</strong><span>SEC</span></div>
       </div>
-
     </div>
-
   </section>
 
-
-
-  <!-- READY -->
-
-  <section
-    id="readyScreen"
-    class="screen"
-  >
-
+  <section id="readyScreen" class="screen">
     <div class="mission-intro">
-
-      <div class="access-granted">
-        ACCESS GRANTED
-      </div>
-
+      <div class="access-granted">ACCESS GRANTED</div>
       <div class="intro-line"></div>
-
-      <div class="micro-label">
-        PRIVATE BIRTHDAY MISSION
-      </div>
-
-
-      <h1>
-        今天的生日禮物，
-        好像沒有打算直接給你。
-      </h1>
-
-
-      <p>
-        有人替你準備了一場 Birthday Mission。
-        找到所有實體任務卡，
-        才能知道真正的生日禮物在哪裡。
-      </p>
-
-
+      <div class="micro-label">PRIVATE BIRTHDAY MISSION</div>
+      <h1>今天的生日禮物，好像沒有打算直接給你。</h1>
+      <p>有人替你準備了一場 Birthday Mission。找到所有實體任務卡，才能知道真正的生日禮物在哪裡。</p>
       <div class="ready-meta">
-
-        <div>
-
-          <span>
-            PLAYER
-          </span>
-
-          <strong id="readyNickname">
-            —
-          </strong>
-
-        </div>
-
-        <div>
-
-          <span>
-            MISSIONS
-          </span>
-
-          <strong id="readyMissionCount">
-            —
-          </strong>
-
-        </div>
-
+        <div><span>PLAYER</span><strong id="readyNickname">—</strong></div>
+        <div><span>MISSIONS</span><strong id="readyMissionCount">—</strong></div>
       </div>
-
-
-      <button
-        id="startBtn"
-        class="main-btn"
-        type="button"
-      >
-        啟動生日任務
-      </button>
-
+      <button id="startBtn" class="main-btn" type="button">啟動生日任務</button>
     </div>
-
   </section>
 
-
-
-  <!-- ACTIVE MISSION -->
-
-  <section
-    id="missionScreen"
-    class="screen"
-  >
-
+  <section id="missionScreen" class="screen">
     <div class="mission-top">
-
       <div>
-
-        <div class="micro-label">
-          YOUR NEXT CLUE
-        </div>
-
-        <h2 id="missionTitle">
-          MISSION 01
-        </h2>
-
+        <div class="micro-label">YOUR NEXT CLUE</div>
+        <h2 id="missionTitle">MISSION 01</h2>
       </div>
-
-
-      <div
-        id="missionCounter"
-        class="mission-counter"
-      >
-        1 / 4
-      </div>
-
+      <div id="missionCounter" class="mission-counter">1 / 4</div>
     </div>
 
-
-    <div class="progress-track">
-
-      <div
-        id="missionProgress"
-        class="progress-value"
-      ></div>
-
-    </div>
-
-
-    <!-- CLUE -->
+    <div class="progress-track"><div id="missionProgress" class="progress-value"></div></div>
 
     <div class="clue-card">
-
-      <span>
-        CLUE
-      </span>
-
-      <p id="missionClue">
-        —
-      </p>
-
+      <span>CLUE</span>
+      <p id="missionClue">—</p>
     </div>
 
-
-
-    <!-- HINT -->
-
     <section class="mission-action-card">
-
       <div class="action-heading">
-
-        <div>
-
-          <span>
-            NEED A HINT?
-          </span>
-
-          <h3>
-            找不到 Mission Card？
-          </h3>
-
-        </div>
-
-        <div class="action-number">
-          ?
-        </div>
-
+        <div><span>NEED A HINT?</span><h3>找不到 Mission Card？</h3></div>
+        <div class="action-number">?</div>
       </div>
-
-
-      <p class="action-description">
-        回答一個只有你們知道的問題，
-        答對後會得到額外提示。
-      </p>
-
-
-      <div class="hint-question">
-
-        <span>
-          QUESTION
-        </span>
-
-        <p id="hintQuestion">
-          —
-        </p>
-
-      </div>
-
-
+      <p class="action-description">回答一個只有你們知道的問題，答對後會得到額外提示。</p>
+      <div class="hint-question"><span>QUESTION</span><p id="hintQuestion">—</p></div>
       <div class="input-action">
-
-        <input
-          id="hintAnswerInput"
-          type="text"
-          maxlength="100"
-          autocomplete="off"
-          placeholder="輸入你的答案"
-        >
-
-
-        <button
-          id="hintSubmitBtn"
-          class="secondary-action-btn"
-          type="button"
-        >
-          解鎖提示
-        </button>
-
+        <input id="hintAnswerInput" type="text" maxlength="100" autocomplete="off" placeholder="輸入你的答案">
+        <button id="hintSubmitBtn" class="secondary-action-btn" type="button">解鎖提示</button>
       </div>
-
-
-      <div
-        id="hintFeedback"
-        class="action-feedback"
-        hidden
-      ></div>
-
-
-      <div
-        id="hintReveal"
-        class="hint-reveal"
-        hidden
-      >
-
-        <span>
-          UNLOCKED HINT
-        </span>
-
-        <p id="hintText">
-          —
-        </p>
-
+      <div id="hintFeedback" class="action-feedback" hidden></div>
+      <div id="hintReveal" class="hint-reveal" hidden>
+        <span>UNLOCKED HINT</span><p id="hintText">—</p>
       </div>
-
     </section>
-
-
-
-    <!-- PASSWORD -->
 
     <section class="mission-action-card">
-
       <div class="action-heading">
-
-        <div>
-
-          <span>
-            MISSION CARD
-          </span>
-
-          <h3>
-            找到實體任務卡了嗎？
-          </h3>
-
-        </div>
-
-        <div class="action-number">
-          #
-        </div>
-
+        <div><span>MISSION CARD</span><h3>找到實體任務卡了嗎？</h3></div>
+        <div class="action-number">#</div>
       </div>
-
-
-      <p class="action-description">
-        輸入 Mission Card 上的 4 位數密碼，
-        驗證成功才能進入下一關。
-      </p>
-
-
+      <p class="action-description">輸入 Mission Card 上的 4 位數密碼，驗證成功才能進入下一關。</p>
       <div class="code-input-area">
-
-        <input
-          id="missionCodeInput"
-          class="mission-code-input"
-          type="text"
-          inputmode="numeric"
-          pattern="[0-9]*"
-          maxlength="4"
-          autocomplete="off"
-          placeholder="0000"
-        >
-
-
-        <button
-          id="missionUnlockBtn"
-          class="main-btn"
-          type="button"
-        >
-          驗證 Mission Card
-        </button>
-
+        <input id="missionCodeInput" class="mission-code-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" placeholder="0000">
+        <button id="missionUnlockBtn" class="main-btn" type="button">驗證 Mission Card</button>
       </div>
-
-
-      <div
-        id="codeFeedback"
-        class="action-feedback"
-        hidden
-      ></div>
-
+      <div id="codeFeedback" class="action-feedback" hidden></div>
     </section>
 
-
-
-    <!-- RESCUE -->
-
-    <section
-      id="rescuePanel"
-      class="rescue-panel"
-    >
-
+    <section id="rescuePanel" class="rescue-panel">
       <div>
-
-        <span>
-          EMERGENCY OPTION
-        </span>
-
-        <strong id="rescueTitle">
-          人道救援
-        </strong>
-
-        <p id="rescueDescription">
-          如果真的完全找不到，
-          到指定時間後可以選擇啟動救援。
-        </p>
-
-        <small id="rescueStatus">
-          —
-        </small>
-
+        <span>EMERGENCY OPTION</span>
+        <strong id="rescueTitle">人道救援</strong>
+        <p id="rescueDescription">如果真的完全找不到，到指定時間後可以選擇啟動救援。</p>
+        <small id="rescueStatus">—</small>
       </div>
-
-
-      <button
-        id="rescueBtn"
-        class="rescue-btn"
-        type="button"
-        disabled
-      >
-        啟動人道救援
-      </button>
-
+      <button id="rescueBtn" class="rescue-btn" type="button" disabled>啟動人道救援</button>
     </section>
-
   </section>
 
-
-
-  <!-- ===================================
-       NORMAL COMPLETE
-       =================================== -->
-
-  <section
-    id="allCompleteScreen"
-    class="screen"
-  >
-
+  <section id="allCompleteScreen" class="screen">
     <div class="center-screen">
-
-      <div class="complete-ring">
-        ✓
-      </div>
-
-      <div class="micro-label">
-        ALL MISSIONS COMPLETE
-      </div>
-
-      <h1>
-        你真的全部找到了。
-      </h1>
-
-      <p>
-        所有 Birthday Mission 已經完成。
-        現在，只剩最後一件事。
-      </p>
-
-
+      <div class="complete-ring">✓</div>
+      <div class="micro-label">ALL MISSIONS COMPLETE</div>
+      <h1>你真的全部找到了。</h1>
+      <p>所有 Birthday Mission 已經完成。現在，只剩最後一件事。</p>
       <div class="final-access-card">
-
-        <span>
-          FINAL ACCESS
-        </span>
-
-        <strong>
-          最後的生日禮物已經解鎖
-        </strong>
-
-        <p>
-          準備好之後，
-          親手揭曉今天真正的生日驚喜。
-        </p>
-
+        <span>FINAL ACCESS</span>
+        <strong>最後的生日禮物已經解鎖</strong>
+        <p>準備好之後，親手揭曉今天真正的生日驚喜。</p>
       </div>
-
-
-      <button
-        id="revealGiftBtn"
-        class="final-reveal-btn"
-        type="button"
-      >
-        揭曉我的生日禮物
-      </button>
-
+      <button id="revealGiftBtn" class="final-reveal-btn" type="button">揭曉我的生日禮物</button>
     </div>
-
   </section>
 
-
-
-  <!-- ===================================
-       NORMAL GIFT REVEALED
-       =================================== -->
-
-  <section
-    id="giftRevealScreen"
-    class="screen"
-  >
-
+  <section id="giftRevealScreen" class="screen">
     <div class="gift-reveal">
-
-      <div class="gift-symbol">
-        ✦
-      </div>
-
-      <div class="micro-label">
-        MISSION REWARD UNLOCKED
-      </div>
-
-
-      <h1>
-        找到了。
-      </h1>
-
-
-      <p class="gift-intro">
-        這就是有人一路讓你找了這麼久，
-        最後想帶你來到的地方。
-      </p>
-
-
+      <div class="gift-symbol">✦</div>
+      <div class="micro-label">MISSION REWARD UNLOCKED</div>
+      <h1>找到了。</h1>
+      <p class="gift-intro">這就是有人一路讓你找了這麼久，最後想帶你來到的地方。</p>
       <div class="gift-location-card">
-
-        <span>
-          YOUR BIRTHDAY GIFT
-        </span>
-
-        <strong id="giftLocation">
-          —
-        </strong>
-
+        <span>YOUR BIRTHDAY GIFT</span>
+        <strong id="giftLocation">—</strong>
       </div>
-
-
       <div class="gift-blessing-card">
-
-        <span>
-          FOR YOU
-        </span>
-
-        <p id="giftBlessing">
-          —
-        </p>
-
+        <span>FOR YOU</span>
+        <p id="giftBlessing">—</p>
       </div>
-
-
-      <div class="gift-ending">
-
-        <span>
-          BIRTHDAY MISSION
-        </span>
-
-        <strong>
-          任務完成，但這份生日驚喜還沒結束。
-        </strong>
-
-      </div>
-
+      <button id="normalReportBtn" class="report-open-btn" type="button">查看我的任務報告</button>
     </div>
-
   </section>
 
-
-
-  <!-- ===================================
-       PREVIEW COMPLETE
-       =================================== -->
-
-  <section
-    id="previewCompleteScreen"
-    class="screen"
-  >
-
-    <div class="center-screen">
-
-      <div class="complete-ring">
-        ✓
-      </div>
-
-      <div class="micro-label">
-        PREVIEW COMPLETE
-      </div>
-
-      <h1>
-        Mission 測試完成
-      </h1>
-
-      <p>
-        所有線索、提示與 Mission Card
-        密碼驗證都可以正常運作。
-      </p>
-
-
-      <div class="preview-final-box">
-
-        <strong>
-          FINAL GIFT TEST
-        </strong>
-
-        <p>
-          可以繼續測試「禮物揭曉」流程，
-          但系統不會傳送真正的禮物位置。
-        </p>
-
-      </div>
-
-
-      <button
-        id="previewRevealBtn"
-        class="main-btn"
-        type="button"
-      >
-        測試禮物揭曉
-      </button>
-
-
-      <button
-        id="restartPreviewBtn"
-        class="text-restart-btn"
-        type="button"
-      >
-        重新開始安全測試
-      </button>
-
-    </div>
-
-  </section>
-
-
-
-  <!-- ===================================
-       PREVIEW GIFT
-       =================================== -->
-
-  <section
-    id="previewGiftScreen"
-    class="screen"
-  >
-
-    <div class="center-screen">
-
-      <div class="complete-ring">
-        ✓
-      </div>
-
-      <div class="micro-label">
-        PREVIEW MODE
-      </div>
-
-      <h1>
-        禮物揭曉功能正常
-      </h1>
-
-      <p>
-        正式 Birthday Mission
-        在完成所有任務後，
-        會於這個階段揭曉真正的生日禮物位置。
-      </p>
-
-
-      <div class="preview-protected-card">
-
-        <span>
-          PROTECTED CONTENT
-        </span>
-
-        <strong>
-          真正禮物位置已隱藏
-        </strong>
-
-        <p>
-          Preview Mode 不會把最終生日禮物位置
-          傳送到購買人的瀏覽器。
-        </p>
-
-      </div>
-
-
-      <button
-        id="previewGiftRestartBtn"
-        class="outline-btn"
-        type="button"
-      >
-        重新開始安全測試
-      </button>
-
-    </div>
-
-  </section>
-
-
-
-  <!-- ===================================
-       RESCUE SUCCESS
-       =================================== -->
-
-  <section
-    id="rescueSuccessScreen"
-    class="screen"
-  >
-
+  <section id="rescueSuccessScreen" class="screen">
     <div class="center-screen rescue-success-content">
-
-      <div class="micro-label">
-        HUMANITARIAN RESCUE
-      </div>
-
-      <div class="rescue-big-icon">
-        🛟
-      </div>
-
-      <h1>
-        好啦，救你一次。
-      </h1>
-
-      <p>
-        看來 Birthday Mission
-        今天真的把你難住了。
-      </p>
-
-
+      <div class="micro-label">HUMANITARIAN RESCUE</div>
+      <div class="rescue-big-icon">🛟</div>
+      <h1>好啦，救你一次。</h1>
+      <p>看來 Birthday Mission 今天真的把你難住了。</p>
       <div class="gift-location-card">
-
-        <span>
-          YOUR BIRTHDAY GIFT
-        </span>
-
-        <strong id="rescueGiftLocation">
-          —
-        </strong>
-
+        <span>YOUR BIRTHDAY GIFT</span>
+        <strong id="rescueGiftLocation">—</strong>
       </div>
-
-
       <div class="gift-blessing-card">
-
-        <span>
-          FOR YOU
-        </span>
-
-        <p id="rescueBlessing">
-          —
-        </p>
-
+        <span>FOR YOU</span>
+        <p id="rescueBlessing">—</p>
       </div>
-
-
-      <div class="rescue-tag">
-        HUMANITARIAN RESCUE USED
-      </div>
-
+      <div class="rescue-tag">HUMANITARIAN RESCUE USED</div>
+      <button id="rescueReportBtn" class="report-open-btn" type="button">查看我的任務報告</button>
     </div>
-
   </section>
 
+  <section id="reportScreen" class="screen">
+    <div class="report-page">
+      <div class="micro-label">MISSION REPORT</div>
+      <h1>你的生日任務報告</h1>
+      <p id="reportIntro" class="report-intro">今天這場 Birthday Mission，留下了一些紀錄。</p>
+
+      <div id="reportModeBadge" class="report-mode-badge">MISSION COMPLETE</div>
+
+      <div class="report-grid">
+        <article class="report-stat"><span>MISSIONS</span><strong id="reportMissions">—</strong><small>完成任務</small></article>
+        <article class="report-stat"><span>TIME</span><strong id="reportTime">—</strong><small>破關時間</small></article>
+        <article class="report-stat"><span>EARLY PEEK</span><strong id="reportPeek">—</strong><small>偷跑次數</small></article>
+        <article class="report-stat"><span>HINTS</span><strong id="reportHints">—</strong><small>使用提示</small></article>
+        <article class="report-stat"><span>WRONG ANSWER</span><strong id="reportWrong">—</strong><small>提示答錯</small></article>
+        <article class="report-stat"><span>WRONG CODE</span><strong id="reportCodeWrong">—</strong><small>密碼輸錯</small></article>
+      </div>
+
+      <div id="previewReportNote" class="preview-report-note" hidden>
+        Preview Mode 不會寫入正式遊戲紀錄，因此次數與時間僅顯示測試狀態。
+      </div>
+
+      <button id="unlockCardBtn" class="final-reveal-btn" type="button">收下這張生日卡</button>
+      <button id="previewCardBtn" class="main-btn" type="button" hidden>預覽永久生日卡</button>
+    </div>
+  </section>
+
+  <section id="previewCompleteScreen" class="screen">
+    <div class="center-screen">
+      <div class="complete-ring">✓</div>
+      <div class="micro-label">PREVIEW COMPLETE</div>
+      <h1>Mission 測試完成</h1>
+      <p>所有線索、提示與 Mission Card 密碼驗證都可以正常運作。</p>
+      <div class="preview-final-box">
+        <strong>FINAL GIFT TEST</strong>
+        <p>可以繼續測試「禮物揭曉」流程，但系統不會傳送真正的禮物位置。</p>
+      </div>
+      <button id="previewRevealBtn" class="main-btn" type="button">測試禮物揭曉</button>
+      <button id="restartPreviewBtn" class="text-restart-btn" type="button">重新開始安全測試</button>
+    </div>
+  </section>
+
+  <section id="previewGiftScreen" class="screen">
+    <div class="center-screen">
+      <div class="complete-ring">✓</div>
+      <div class="micro-label">PREVIEW MODE</div>
+      <h1>禮物揭曉功能正常</h1>
+      <p>正式 Birthday Mission 在完成所有任務後，會於這個階段揭曉真正的生日禮物位置。</p>
+      <div class="preview-protected-card">
+        <span>PROTECTED CONTENT</span>
+        <strong>真正禮物位置已隱藏</strong>
+        <p>Preview Mode 不會把最終生日禮物位置傳送到購買人的瀏覽器。</p>
+      </div>
+      <button id="previewReportBtn" class="main-btn" type="button">測試任務報告</button>
+      <button id="previewGiftRestartBtn" class="text-restart-btn" type="button">重新開始安全測試</button>
+    </div>
+  </section>
+
+  <section id="birthdayCardScreen" class="screen">
+    <div class="permanent-card-page">
+      <div class="card-page-label">PERMANENT BIRTHDAY CARD</div>
+
+      <article id="birthdayCard" class="birthday-card template-black">
+        <div class="birthday-card-topline">
+          <span>BIRTHDAY MEMORY</span>
+          <span id="cardDate">—</span>
+        </div>
+
+        <div id="cardPhotoWrap" class="birthday-card-photo">
+          <img id="cardPhoto" alt="Birthday Memory">
+        </div>
+
+        <div class="birthday-card-copy">
+          <span id="cardSubtitle" class="birthday-card-subtitle">—</span>
+          <h1 id="cardTitle">HAPPY BIRTHDAY</h1>
+          <p id="cardMessage">—</p>
+          <div class="birthday-card-signature">
+            <span>FROM</span>
+            <strong id="cardSignature">—</strong>
+          </div>
+        </div>
+      </article>
+
+      <div class="permanent-note">
+        <strong id="permanentCardHeading">這張生日卡已永久解鎖</strong>
+        <p id="permanentCardText">以後再次感應同一張 NFC，就會直接回到這張生日卡。</p>
+      </div>
+
+      <button id="previewCardRestartBtn" class="outline-btn" type="button" hidden>重新開始安全測試</button>
+    </div>
+  </section>
 
 </main>
 
-
-
-<div
-  id="toast"
-  class="toast"
-></div>
-
+<div id="toast" class="toast"></div>
 
 <script src="../assets/js/config.js"></script>
-<script src="../assets/js/game.js?v=phase06-2"></script>
-
-
+<script src="../assets/js/game.js?v=phase07-1"></script>
 </body>
-
 </html>
