@@ -3170,16 +3170,36 @@ function showCreationSuccess(
     false;
 
 
+  /* ===============================
+     GAME ID
+     =============================== */
+
+
   successGameId.textContent =
-    result.gameId;
+    result.gameId || '';
+
+
+  /* ===============================
+     PREVIEW URL
+     =============================== */
 
 
   successGameUrl.textContent =
-    result.gameUrl;
+    result.previewUrl || '';
 
 
-  successGameUrl.href =
-    result.gameUrl;
+  /*
+   * 成功頁目前只顯示文字，
+   * 不直接做正式遊戲入口按鈕。
+   *
+   * Phase 04 完成 Preview Mode 後
+   * 同一條網址就能使用。
+   */
+
+
+  /* ===============================
+     MISSION PASSWORDS
+     =============================== */
 
 
   successMissionCards.innerHTML =
@@ -3226,30 +3246,24 @@ function showCreationSuccess(
 
         <div class="success-mission-head">
 
-          <div class="success-mission-name">
-            MISSION ${padded}
+          <div>
+
+            <div class="mission-label">
+              PRIVATE MISSION
+            </div>
+
+            <div class="success-mission-name">
+              MISSION ${padded}
+            </div>
+
           </div>
+
 
           <div class="success-code">
             ${escapeHtml(
               mission.code
             )}
           </div>
-
-        </div>
-
-
-        <div class="success-location">
-
-          <span>
-            實體卡藏匿位置
-          </span>
-
-          <strong>
-            ${escapeHtml(
-              mission.hideLocation
-            )}
-          </strong>
 
         </div>
 
@@ -3272,7 +3286,6 @@ function showCreationSuccess(
     false;
 
 }
-
 
 /* ======================================
  * COPY GAME URL
@@ -3303,7 +3316,7 @@ async function copySuccessGameUrl() {
 
 
     showToast(
-      'NFC 專屬網址已複製'
+      '安全測試網址已複製'
     );
 
 
