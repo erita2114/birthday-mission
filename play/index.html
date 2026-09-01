@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <meta
+    name="theme-color"
+    content="#101010"
+  >
+
+  <title>Birthday Mission</title>
+
+  <link
+    rel="stylesheet"
+    href="../assets/css/game.css"
+  >
+
+</head>
+
+
+<body>
+
+
+<!-- PREVIEW BANNER -->
+
+<div
+  id="previewBanner"
+  class="preview-banner"
+  hidden
+>
+
+  <strong>
+    PREVIEW MODE
+  </strong>
+
+  <span>
+    安全測試模式｜不影響正式遊戲進度
+  </span>
+
+</div>
+
+
+
+<main class="game-shell">
+
+
+  <!-- BRAND -->
+
+  <header class="game-brand">
+
+    <div class="brand-code">
+      BM
+    </div>
+
+    <div>
+
+      <strong>
+        BIRTHDAY MISSION
+      </strong>
+
+      <span>
+        PRIVATE ACCESS
+      </span>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- LOADING -->
+
+  <section
+    id="loadingScreen"
+    class="screen active"
+  >
+
+    <div class="center-screen">
+
+      <div class="loading-ring"></div>
+
+      <div class="micro-label">
+        VERIFYING ACCESS
+      </div>
+
+      <h1>
+        Birthday Mission
+      </h1>
+
+      <p>
+        正在確認生日任務資料…
+      </p>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- WAITING APPROVAL -->
+
+  <section
+    id="waitingScreen"
+    class="screen"
+  >
+
+    <div class="center-screen">
+
+      <div class="status-icon">
+        ···
+      </div>
+
+      <div class="micro-label">
+        ORDER VERIFICATION
+      </div>
+
+      <h1>
+        任務準備中
+      </h1>
+
+      <p>
+        Birthday Mission 已建立，
+        目前正在等待賣家確認訂單。
+      </p>
+
+      <div class="info-box">
+        訂單確認完成後，
+        Birthday Mission 將自動開放。
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- DISABLED -->
+
+  <section
+    id="disabledScreen"
+    class="screen"
+  >
+
+    <div class="center-screen">
+
+      <div class="status-icon">
+        ×
+      </div>
+
+      <div class="micro-label">
+        ACCESS DISABLED
+      </div>
+
+      <h1>
+        此任務目前無法使用
+      </h1>
+
+      <p>
+        如有疑問，
+        請聯絡 Birthday Mission 賣家。
+      </p>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- ERROR -->
+
+  <section
+    id="errorScreen"
+    class="screen"
+  >
+
+    <div class="center-screen">
+
+      <div class="status-icon">
+        !
+      </div>
+
+      <div class="micro-label">
+        ACCESS ERROR
+      </div>
+
+      <h1>
+        找不到生日任務
+      </h1>
+
+      <p id="errorMessage">
+        請確認網址是否正確。
+      </p>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- LOCKED -->
+
+  <section
+    id="lockedScreen"
+    class="screen"
+  >
+
+    <div class="center-screen">
+
+      <div class="micro-label">
+        ACCESS DENIED
+      </div>
+
+      <div class="locked-emoji">
+        🚨
+      </div>
+
+      <h1>
+        抓到偷跑仔
+      </h1>
+
+      <p>
+        <span id="lockedNickname"></span>
+        的 Birthday Mission
+        還沒到開放時間。
+      </p>
+
+
+      <div class="countdown">
+
+        <div>
+
+          <strong id="countDays">
+            00
+          </strong>
+
+          <span>
+            DAYS
+          </span>
+
+        </div>
+
+
+        <div>
+
+          <strong id="countHours">
+            00
+          </strong>
+
+          <span>
+            HOURS
+          </span>
+
+        </div>
+
+
+        <div>
+
+          <strong id="countMinutes">
+            00
+          </strong>
+
+          <span>
+            MIN
+          </span>
+
+        </div>
+
+
+        <div>
+
+          <strong id="countSeconds">
+            00
+          </strong>
+
+          <span>
+            SEC
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- READY -->
+
+  <section
+    id="readyScreen"
+    class="screen"
+  >
+
+    <div class="mission-intro">
+
+      <div class="access-granted">
+        ACCESS GRANTED
+      </div>
+
+      <div class="intro-line"></div>
+
+      <div class="micro-label">
+        PRIVATE BIRTHDAY MISSION
+      </div>
+
+
+      <h1>
+        今天的生日禮物，
+        好像沒有打算直接給你。
+      </h1>
+
+
+      <p>
+        有人替你準備了一場 Birthday Mission。
+        找到所有實體任務卡，
+        才能知道真正的生日禮物在哪裡。
+      </p>
+
+
+      <div class="ready-meta">
+
+        <div>
+
+          <span>
+            PLAYER
+          </span>
+
+          <strong id="readyNickname">
+            —
+          </strong>
+
+        </div>
+
+
+        <div>
+
+          <span>
+            MISSIONS
+          </span>
+
+          <strong id="readyMissionCount">
+            —
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <button
+        id="startBtn"
+        class="main-btn"
+        type="button"
+      >
+        啟動生日任務
+      </button>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- ACTIVE MISSION -->
+
+  <section
+    id="missionScreen"
+    class="screen"
+  >
+
+    <div class="mission-top">
+
+      <div>
+
+        <div class="micro-label">
+          YOUR NEXT CLUE
+        </div>
+
+        <h2 id="missionTitle">
+          MISSION 01
+        </h2>
+
+      </div>
+
+
+      <div
+        id="missionCounter"
+        class="mission-counter"
+      >
+        1 / 4
+      </div>
+
+    </div>
+
+
+    <div class="progress-track">
+
+      <div
+        id="missionProgress"
+        class="progress-value"
+      ></div>
+
+    </div>
+
+
+    <div class="clue-card">
+
+      <span>
+        CLUE
+      </span>
+
+      <p id="missionClue">
+        —
+      </p>
+
+    </div>
+
+
+    <div
+      id="formalPendingArea"
+      class="coming-next"
+    >
+
+      <strong>
+        找到實體 Mission Card
+      </strong>
+
+      <p>
+        下一階段會在這裡加入
+        提示解鎖與四位數任務碼驗證。
+      </p>
+
+    </div>
+
+
+    <!-- Preview only -->
+
+    <div
+      id="previewNavigation"
+      class="preview-navigation"
+      hidden
+    >
+
+      <div class="preview-help">
+
+        <strong>
+          PREVIEW CHECK
+        </strong>
+
+        <p>
+          此處僅供確認各 Mission
+          初始線索是否正確。
+          不會改變正式遊戲進度。
+        </p>
+
+      </div>
+
+
+      <div class="preview-nav-buttons">
+
+        <button
+          id="previewPrevBtn"
+          class="outline-btn"
+          type="button"
+        >
+          上一個 Mission
+        </button>
+
+
+        <button
+          id="previewNextBtn"
+          class="main-btn"
+          type="button"
+        >
+          下一個 Mission
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+</main>
+
+
+<div
+  id="toast"
+  class="toast"
+></div>
+
+
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/game.js"></script>
+
+</body>
+
+</html>
