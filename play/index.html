@@ -2,16 +2,26 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0b0b0a">
+  <meta name="color-scheme" content="dark">
+  <meta name="format-detection" content="telephone=no">
   <title>Birthday Mission</title>
-  <link rel="stylesheet" href="../assets/css/game.css?v=phase08-03-mode-1">
+  <link rel="stylesheet" href="../assets/css/game.css?v=phase08-04-commercial-1">
 </head>
 <body>
 
 <div id="previewBanner" class="preview-banner" hidden>
   <strong>PREVIEW MODE</strong>
   <span>安全測試模式｜不影響正式遊戲進度</span>
+</div>
+
+<div id="networkBanner" class="network-banner" role="alert" hidden>
+  <span class="network-dot" aria-hidden="true"></span>
+  <div>
+    <strong>目前沒有網路連線</strong>
+    <span>請確認 Wi-Fi 或行動網路，恢復後即可繼續。</span>
+  </div>
 </div>
 
 <main class="game-shell">
@@ -32,12 +42,13 @@
     <small id="modeBadgeTagline">有人把想說的話，藏進了每一關。</small>
   </div>
 
-  <section id="loadingScreen" class="screen active">
+  <section id="loadingScreen" class="screen active" aria-live="polite">
     <div class="center-screen">
-      <div class="loading-ring"></div>
+      <div class="loading-ring" aria-hidden="true"></div>
       <div class="micro-label">VERIFYING ACCESS</div>
       <h1>Birthday Mission</h1>
-      <p>正在確認生日任務資料…</p>
+      <p id="loadingMessage">正在確認生日任務資料…</p>
+      <small id="loadingDetail" class="loading-detail">請保持網路連線，通常只需要幾秒鐘。</small>
     </div>
   </section>
 
@@ -47,7 +58,8 @@
       <div class="micro-label">ORDER VERIFICATION</div>
       <h1>任務準備中</h1>
       <p>Birthday Mission 已建立，目前正在等待賣家確認訂單。</p>
-      <div class="info-box">訂單確認完成後，Birthday Mission 將自動開放。</div>
+      <div class="info-box">訂單確認完成後，Birthday Mission 將自動開放。若賣家剛完成確認，可按下方重新檢查。</div>
+      <button id="waitingRefreshBtn" class="outline-btn state-retry-btn" type="button">重新確認訂單狀態</button>
     </div>
   </section>
 
@@ -56,7 +68,8 @@
       <div class="status-icon">×</div>
       <div class="micro-label">ACCESS DISABLED</div>
       <h1>此任務目前無法使用</h1>
-      <p>如有疑問，請聯絡 Birthday Mission 賣家。</p>
+      <p>如有疑問，請聯絡 Birthday Mission 賣家。若狀態剛被重新啟用，可重新確認一次。</p>
+      <button id="disabledRefreshBtn" class="outline-btn state-retry-btn" type="button">重新確認任務狀態</button>
     </div>
   </section>
 
@@ -64,8 +77,9 @@
     <div class="center-screen">
       <div class="status-icon">!</div>
       <div class="micro-label">ACCESS ERROR</div>
-      <h1>找不到生日任務</h1>
-      <p id="errorMessage">請確認網址是否正確。</p>
+      <h1>生日任務暫時無法讀取</h1>
+      <p id="errorMessage">請確認網址或網路連線後再試一次。</p>
+      <button id="errorRetryBtn" class="main-btn state-retry-btn" type="button">重新載入生日任務</button>
     </div>
   </section>
 
@@ -123,10 +137,10 @@
       <p id="hintDescription" class="action-description">回答一個只有你們知道的問題，答對後會得到額外提示。</p>
       <div class="hint-question"><span>QUESTION</span><p id="hintQuestion">—</p></div>
       <div class="input-action">
-        <input id="hintAnswerInput" type="text" maxlength="100" autocomplete="off" placeholder="輸入你的答案">
+        <input id="hintAnswerInput" type="text" maxlength="100" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done" placeholder="輸入你的答案" aria-label="提示題答案">
         <button id="hintSubmitBtn" class="secondary-action-btn" type="button">解鎖提示</button>
       </div>
-      <div id="hintFeedback" class="action-feedback" hidden></div>
+      <div id="hintFeedback" class="action-feedback" role="status" aria-live="polite" hidden></div>
       <div id="hintReveal" class="hint-reveal" hidden>
         <span>UNLOCKED HINT</span><p id="hintText">—</p>
       </div>
@@ -139,10 +153,10 @@
       </div>
       <p id="missionCardDescription" class="action-description">輸入 Mission Card 上的 4 位數密碼，驗證成功才能進入下一關。</p>
       <div class="code-input-area">
-        <input id="missionCodeInput" class="mission-code-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" placeholder="0000">
+        <input id="missionCodeInput" class="mission-code-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="one-time-code" enterkeyhint="done" placeholder="0000" aria-label="Mission Card 四位數密碼">
         <button id="missionUnlockBtn" class="main-btn" type="button">驗證 Mission Card</button>
       </div>
-      <div id="codeFeedback" class="action-feedback" hidden></div>
+      <div id="codeFeedback" class="action-feedback" role="status" aria-live="polite" hidden></div>
     </section>
 
     <section id="rescuePanel" class="rescue-panel">
@@ -311,9 +325,9 @@
   </div>
 </div>
 
-<div id="toast" class="toast"></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script src="../assets/js/config.js"></script>
-<script src="../assets/js/game.js?v=phase08-03-mode-1"></script>
+<script src="../assets/js/game.js?v=phase08-04-commercial-1"></script>
 </body>
 </html>
