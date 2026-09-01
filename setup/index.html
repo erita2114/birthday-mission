@@ -1192,24 +1192,34 @@
 
 
   <p class="success-intro">
-    系統已建立專屬生日任務。
-    以下資料將用於製作實體 Mission Cards
-    與 NFC 卡片。
+    你的 Birthday Mission 資料已成功送出。
+    請保留以下 Game ID、測試網址與 Mission Cards 密碼。
   </p>
 
 
-  <div class="success-warning">
+  <!-- STATUS -->
 
-    <strong>
-      請勿將此畫面傳給壽星
-    </strong>
+  <div class="order-status-box">
 
-    <p>
-      以下包含 Mission Card 密碼與藏匿位置。
-    </p>
+    <div class="order-status-dot"></div>
+
+    <div>
+
+      <strong>
+        等待賣家確認訂單
+      </strong>
+
+      <p>
+        賣家核對蝦皮訂單完成後，
+        測試模式與正式 NFC Birthday Mission 才會啟用。
+      </p>
+
+    </div>
 
   </div>
 
+
+  <!-- GAME INFO -->
 
   <div class="success-card">
 
@@ -1223,17 +1233,33 @@
     ></div>
 
 
-    <div class="success-label success-url-label">
-      NFC 專屬網址
+    <div
+      class="success-label success-url-label"
+    >
+      NFC 專屬網址・測試版
     </div>
 
-    <a
+
+    <div
       id="successGameUrl"
       class="success-url"
-      href="#"
-      target="_blank"
-      rel="noopener"
-    ></a>
+    ></div>
+
+
+    <div class="preview-note">
+
+      <strong>
+        PREVIEW MODE｜安全測試網址
+      </strong>
+
+      <p>
+        訂單確認啟用後，
+        可供購買人與賣家測試 Birthday Mission。
+        測試模式不會影響正式遊戲進度，
+        且不會公開真正的最終禮物位置。
+      </p>
+
+    </div>
 
 
     <button
@@ -1241,20 +1267,22 @@
       class="copy-btn"
       type="button"
     >
-      複製 NFC 專屬網址
+      複製測試網址
     </button>
 
   </div>
 
 
+  <!-- MISSION PASSWORDS -->
+
   <div class="success-section-title">
 
     <span>
-      MISSION CARDS
+      MISSION PASSWORDS
     </span>
 
     <strong>
-      實體任務卡資料
+      Mission Cards 密碼
     </strong>
 
   </div>
@@ -1266,15 +1294,32 @@
   ></div>
 
 
-  <div class="success-footer">
+  <!-- WARNING -->
+
+  <div class="success-warning">
 
     <strong>
-      Birthday Mission 已成功送出 🎉
+      請勿將 Mission 密碼提供給壽星
     </strong>
 
     <p>
-      資料已進入製作流程。
-      如需修改請透過蝦皮聊聊聯絡。
+      Mission 密碼是實體任務卡的一部分。
+      正式遊戲請讓壽星透過實體 NFC 卡開始。
+    </p>
+
+  </div>
+
+
+  <!-- FOOTER -->
+
+  <div class="success-footer">
+
+    <strong>
+      Mission Cards 已成功送出
+    </strong>
+
+    <p>
+      資料已進入製作流程，如需修改請透過蝦皮聊聊聯絡。
     </p>
 
   </div>
