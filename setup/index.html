@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
+
 <head>
+
   <meta charset="UTF-8">
 
   <meta
@@ -19,791 +21,939 @@
     rel="stylesheet"
     href="../assets/css/setup.css"
   >
+
 </head>
+
 
 <body>
 
-  <header class="topbar">
-    <div class="brand">
-      <span class="brand-mark">BM</span>
+<header class="topbar">
 
-      <div>
-        <div class="brand-name">
-          BIRTHDAY MISSION
-        </div>
+  <div class="brand">
 
-        <div class="brand-sub">
-          PRIVATE BIRTHDAY EXPERIENCE
-        </div>
+    <span class="brand-mark">
+      BM
+    </span>
+
+    <div>
+
+      <div class="brand-name">
+        BIRTHDAY MISSION
       </div>
+
+      <div class="brand-sub">
+        PRIVATE BIRTHDAY EXPERIENCE
+      </div>
+
     </div>
-
-    <button
-      id="clearDraftBtn"
-      class="text-btn"
-      type="button"
-    >
-      清除暫存
-    </button>
-  </header>
-
-
-  <main class="shell">
-
-    <section class="hero">
-
-      <div class="eyebrow">
-        NFC BIRTHDAY MISSION
-      </div>
-
-      <h1>
-        建立專屬生日任務
-      </h1>
-
-      <p>
-        請依序完成以下資料。
-        任務內容送出後將進入製作流程，
-        請確認線索與藏匿位置填寫正確。
-      </p>
-
-    </section>
-
-
-    <section class="progress-box">
-
-      <div class="progress-top">
-
-        <span id="stepLabel">
-          STEP 01 / 04
-        </span>
-
-        <span id="stepName">
-          基本設定
-        </span>
-
-      </div>
-
-      <div class="progress-track">
-        <div
-          id="progressBar"
-          class="progress-bar"
-        ></div>
-      </div>
-
-    </section>
-
-
-    <form
-      id="missionForm"
-      novalidate
-    >
-
-      <!-- STEP 01 -->
-      <section
-        class="form-step active"
-        data-step="1"
-      >
-
-        <div class="section-heading">
-
-          <span class="section-number">
-            01
-          </span>
-
-          <div>
-            <h2>基本設定</h2>
-
-            <p>
-              先告訴我們這場生日任務的基本資訊。
-            </p>
-          </div>
-
-        </div>
-
-
-        <div class="form-card">
-
-          <div class="field">
-
-            <label for="orderNo">
-              蝦皮訂單編號
-              <span>*</span>
-            </label>
-
-            <input
-              id="orderNo"
-              name="orderNo"
-              type="text"
-              autocomplete="off"
-              placeholder="例如：250901XXXXXX"
-              required
-            >
-
-            <div class="help">
-              請填寫本次購買 Birthday Mission
-              的蝦皮訂單編號。
-            </div>
-
-          </div>
-
-
-          <div class="field">
-
-            <label for="nickname">
-              壽星暱稱
-              <span>*</span>
-            </label>
-
-            <input
-              id="nickname"
-              name="nickname"
-              type="text"
-              autocomplete="off"
-              placeholder="例如：小美、寶貝、阿哲"
-              maxlength="30"
-              required
-            >
-
-          </div>
-
-
-          <div class="field">
-
-            <label for="birthdayDate">
-              生日日期
-              <span>*</span>
-            </label>
-
-            <input
-              id="birthdayDate"
-              name="birthdayDate"
-              type="date"
-              required
-            >
-
-          </div>
-
-
-          <div class="field">
-
-            <label>
-              遊戲模式
-              <span>*</span>
-            </label>
-
-            <div class="choice-grid">
-
-              <label class="choice-card">
-
-                <input
-                  type="radio"
-                  name="gameMode"
-                  value="暖心模式"
-                  required
-                >
-
-                <div class="choice-content">
-
-                  <div class="choice-icon">
-                    🥰
-                  </div>
-
-                  <strong>
-                    暖心模式
-                  </strong>
-
-                  <small>
-                    溫柔、有感情，
-                    適合情侶與家人
-                  </small>
-
-                </div>
-
-              </label>
-
-
-              <label class="choice-card">
-
-                <input
-                  type="radio"
-                  name="gameMode"
-                  value="嘴砲模式"
-                >
-
-                <div class="choice-content">
-
-                  <div class="choice-icon">
-                    😂
-                  </div>
-
-                  <strong>
-                    嘴砲模式
-                  </strong>
-
-                  <small>
-                    有梗、有吐槽，
-                    適合好友與情侶
-                  </small>
-
-                </div>
-
-              </label>
-
-
-              <label class="choice-card">
-
-                <input
-                  type="radio"
-                  name="gameMode"
-                  value="地獄模式"
-                >
-
-                <div class="choice-content">
-
-                  <div class="choice-icon">
-                    😈
-                  </div>
-
-                  <strong>
-                    地獄模式
-                  </strong>
-
-                  <small>
-                    吐槽火力全開，
-                    心臟強一點再選
-                  </small>
-
-                </div>
-
-              </label>
-
-            </div>
-
-          </div>
-
-          <!-- ✅ 任務關卡數加在這裡 -->
-<div class="field">
-
-  <label>
-    任務關卡數
-    <span>*</span>
-  </label>
-
-  <div class="choice-grid mission-count-grid">
-
-    <label class="choice-card">
-      <input
-        type="radio"
-        name="missionCount"
-        value="1"
-        required
-      >
-
-      <div class="choice-content">
-        <div class="choice-icon">1</div>
-        <strong>1 個 Mission</strong>
-        <small>簡單快速，不需要太多佈置</small>
-      </div>
-    </label>
-
-    <label class="choice-card">
-      <input
-        type="radio"
-        name="missionCount"
-        value="2"
-        checked
-      >
-
-      <div class="choice-content">
-        <div class="choice-icon">2</div>
-        <strong>2 個 Mission</strong>
-        <small>輕量尋寶，推薦入門</small>
-      </div>
-    </label>
-
-    <label class="choice-card">
-      <input
-        type="radio"
-        name="missionCount"
-        value="3"
-      >
-
-      <div class="choice-content">
-        <div class="choice-icon">3</div>
-        <strong>3 個 Mission</strong>
-        <small>有完整尋寶感又不會太累</small>
-      </div>
-    </label>
-
-    <label class="choice-card">
-      <input
-        type="radio"
-        name="missionCount"
-        value="4"
-      >
-
-      <div class="choice-content">
-        <div class="choice-icon">4</div>
-        <strong>4 個 Mission</strong>
-        <small>完整 Birthday Mission 體驗</small>
-      </div>
-    </label>
 
   </div>
 
-</div>
+
+  <button
+    id="clearDraftBtn"
+    class="text-btn"
+    type="button"
+  >
+    清除暫存
+  </button>
+
+</header>
 
 
-          <div class="time-grid">
+<main class="shell">
 
-            <div class="field">
+  <!-- HERO -->
 
-              <label for="unlockTime">
-                遊戲解鎖時間
-                <span>*</span>
-              </label>
+  <section class="hero">
+
+    <div class="eyebrow">
+      NFC BIRTHDAY MISSION
+    </div>
+
+    <h1>
+      建立專屬生日任務
+    </h1>
+
+    <p>
+      請依序完成生日任務設定。
+      你可以依照想安排的驚喜程度，
+      自由選擇 1～4 個尋寶 Mission。
+    </p>
+
+  </section>
+
+
+  <!-- PROGRESS -->
+
+  <section class="progress-box">
+
+    <div class="progress-top">
+
+      <span id="stepLabel">
+        STEP 01 / 04
+      </span>
+
+      <span id="stepName">
+        基本設定
+      </span>
+
+    </div>
+
+
+    <div class="progress-track">
+
+      <div
+        id="progressBar"
+        class="progress-bar"
+      ></div>
+
+    </div>
+
+  </section>
+
+
+  <form
+    id="missionForm"
+    novalidate
+  >
+
+
+    <!-- ===================================
+         STEP 01
+         =================================== -->
+
+    <section
+      class="form-step active"
+      data-step="1"
+    >
+
+      <div class="section-heading">
+
+        <span class="section-number">
+          01
+        </span>
+
+        <div>
+
+          <h2>
+            基本設定
+          </h2>
+
+          <p>
+            先設定這場 Birthday Mission
+            的基本資料。
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="form-card">
+
+
+        <!-- 訂單 -->
+
+        <div class="field">
+
+          <label for="orderNo">
+            蝦皮訂單編號
+            <span>*</span>
+          </label>
+
+          <input
+            id="orderNo"
+            name="orderNo"
+            type="text"
+            autocomplete="off"
+            placeholder="例如：250901XXXXXX"
+            required
+          >
+
+          <div class="help">
+            請填寫本次購買 Birthday Mission
+            的蝦皮訂單編號。
+          </div>
+
+        </div>
+
+
+        <!-- 壽星 -->
+
+        <div class="field">
+
+          <label for="nickname">
+            壽星暱稱
+            <span>*</span>
+          </label>
+
+          <input
+            id="nickname"
+            name="nickname"
+            type="text"
+            maxlength="30"
+            autocomplete="off"
+            placeholder="例如：小美、寶貝、阿哲"
+            required
+          >
+
+        </div>
+
+
+        <!-- 生日 -->
+
+        <div class="field">
+
+          <label for="birthdayDate">
+            生日日期
+            <span>*</span>
+          </label>
+
+          <input
+            id="birthdayDate"
+            name="birthdayDate"
+            type="date"
+            required
+          >
+
+        </div>
+
+
+        <!-- 任務數量 -->
+
+        <div class="field">
+
+          <label>
+            想安排幾個尋寶 Mission？
+            <span>*</span>
+          </label>
+
+          <div class="help mission-count-help">
+            最少 1 關、最多 4 關。
+            系統只會建立你選擇數量的實體 Mission Cards。
+          </div>
+
+
+          <div class="count-grid">
+
+
+            <label class="count-card">
 
               <input
-                id="unlockTime"
-                name="unlockTime"
-                type="time"
-                value="00:00"
+                type="radio"
+                name="missionCount"
+                value="1"
                 required
               >
 
-              <div class="help">
-                預設生日當天 00:00 開放。
+              <div class="count-content">
+
+                <div class="count-number">
+                  1
+                </div>
+
+                <strong>
+                  1 關
+                </strong>
+
+                <small>
+                  簡短驚喜
+                </small>
+
               </div>
 
-            </div>
+            </label>
 
 
-            <div class="field">
-
-              <label for="rescueTime">
-                人道救援時間
-                <span>*</span>
-              </label>
+            <label class="count-card">
 
               <input
-                id="rescueTime"
-                name="rescueTime"
-                type="time"
-                value="22:00"
+                type="radio"
+                name="missionCount"
+                value="2"
+              >
+
+              <div class="count-content">
+
+                <div class="count-number">
+                  2
+                </div>
+
+                <strong>
+                  2 關
+                </strong>
+
+                <small>
+                  輕鬆尋寶
+                </small>
+
+              </div>
+
+            </label>
+
+
+            <label class="count-card">
+
+              <input
+                type="radio"
+                name="missionCount"
+                value="3"
+              >
+
+              <div class="count-content">
+
+                <div class="count-number">
+                  3
+                </div>
+
+                <strong>
+                  3 關
+                </strong>
+
+                <small>
+                  豐富體驗
+                </small>
+
+              </div>
+
+            </label>
+
+
+            <label class="count-card">
+
+              <input
+                type="radio"
+                name="missionCount"
+                value="4"
+              >
+
+              <div class="count-content">
+
+                <div class="count-number">
+                  4
+                </div>
+
+                <strong>
+                  4 關
+                </strong>
+
+                <small>
+                  完整挑戰
+                </small>
+
+              </div>
+
+            </label>
+
+
+          </div>
+
+        </div>
+
+
+        <!-- 模式 -->
+
+        <div class="field">
+
+          <label>
+            遊戲模式
+            <span>*</span>
+          </label>
+
+
+          <div class="choice-grid">
+
+
+            <label class="choice-card">
+
+              <input
+                type="radio"
+                name="gameMode"
+                value="暖心模式"
                 required
               >
 
-              <div class="help">
-                到達此時間仍未完成，
-                可選擇直接公布禮物位置。
+              <div class="choice-content">
+
+                <div class="choice-icon">
+                  🥰
+                </div>
+
+                <strong>
+                  暖心模式
+                </strong>
+
+                <small>
+                  溫柔、有感情，
+                  適合情侶與家人
+                </small>
+
               </div>
 
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- STEP 02 -->
-      <section
-        class="form-step"
-        data-step="2"
-      >
-
-        <div class="section-heading">
-
-          <span class="section-number">
-            02
-          </span>
-
-          <div>
-
-            <h2>
-              設定四個 Mission
-            </h2>
-
-            <p>
-              每一關都會搭配一張實體 Mission Card。
-            </p>
-
-          </div>
-
-        </div>
-
-
-        <div
-          id="missionsContainer"
-          class="missions"
-        ></div>
-
-      </section>
-
-
-      <!-- STEP 03 -->
-      <section
-        class="form-step"
-        data-step="3"
-      >
-
-        <div class="section-heading">
-
-          <span class="section-number">
-            03
-          </span>
-
-          <div>
-
-            <h2>
-              最終生日禮物
-            </h2>
-
-            <p>
-              四個 Mission 完成後，
-              壽星才會看到這裡的內容。
-            </p>
-
-          </div>
-
-        </div>
-
-
-        <div class="form-card">
-
-          <div class="field">
-
-            <label for="giftLocation">
-              最終禮物位置
-              <span>*</span>
             </label>
 
-            <textarea
-              id="giftLocation"
-              name="giftLocation"
-              rows="4"
-              maxlength="300"
-              placeholder="例如：衣櫃最上層的黑色袋子裡。"
-              required
-            ></textarea>
 
-            <div class="help">
-              此位置在正常破關或啟動人道救援以前，
-              不會顯示給壽星。
-            </div>
-
-          </div>
-
-
-          <div class="field">
-
-            <label for="completionBlessing">
-              破關祝福
-              <span>*</span>
-            </label>
-
-            <textarea
-              id="completionBlessing"
-              name="completionBlessing"
-              rows="6"
-              maxlength="800"
-              placeholder="例如：你真的找到啦 ❤️ 希望今天除了收到禮物，也多了一段值得記住的回憶。"
-              required
-            ></textarea>
-
-            <div class="help">
-              這段文字會在找到最終生日禮物時顯示。
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- STEP 04 -->
-      <section
-        class="form-step"
-        data-step="4"
-      >
-
-        <div class="section-heading">
-
-          <span class="section-number">
-            04
-          </span>
-
-          <div>
-
-            <h2>
-              永久電子生日卡
-            </h2>
-
-            <p>
-              遊戲完成後，
-              同一張 NFC 將永久變成這張生日卡。
-            </p>
-
-          </div>
-
-        </div>
-
-
-        <div class="form-card">
-
-          <div class="field">
-
-            <label for="cardTitle">
-              卡片標題
-              <span>*</span>
-            </label>
-
-            <input
-              id="cardTitle"
-              name="cardTitle"
-              type="text"
-              value="HAPPY BIRTHDAY"
-              maxlength="60"
-              required
-            >
-
-          </div>
-
-
-          <div class="field">
-
-            <label for="cardSubtitle">
-              卡片副標題
-              <span>*</span>
-            </label>
-
-            <input
-              id="cardSubtitle"
-              name="cardSubtitle"
-              type="text"
-              placeholder="例如：給最特別的妳"
-              maxlength="80"
-              required
-            >
-
-          </div>
-
-
-          <div class="field">
-
-            <label for="cardMessage">
-              生日祝福
-              <span>*</span>
-            </label>
-
-            <textarea
-              id="cardMessage"
-              name="cardMessage"
-              rows="8"
-              maxlength="1500"
-              placeholder="寫下一段想永久留給壽星的話……"
-              required
-            ></textarea>
-
-          </div>
-
-
-          <div class="field">
-
-            <label for="cardSignature">
-              署名
-              <span>*</span>
-            </label>
-
-            <input
-              id="cardSignature"
-              name="cardSignature"
-              type="text"
-              placeholder="例如：FROM JAY"
-              maxlength="80"
-              required
-            >
-
-          </div>
-
-
-          <div class="field">
-
-            <label for="cardPhoto">
-              生日卡照片
-              <span>*</span>
-            </label>
-
-            <label
-              class="upload-box"
-              for="cardPhoto"
-            >
+            <label class="choice-card">
 
               <input
-                id="cardPhoto"
-                name="cardPhoto"
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
+                type="radio"
+                name="gameMode"
+                value="嘴砲模式"
+              >
+
+              <div class="choice-content">
+
+                <div class="choice-icon">
+                  😂
+                </div>
+
+                <strong>
+                  嘴砲模式
+                </strong>
+
+                <small>
+                  有梗、有吐槽，
+                  適合好友與情侶
+                </small>
+
+              </div>
+
+            </label>
+
+
+            <label class="choice-card">
+
+              <input
+                type="radio"
+                name="gameMode"
+                value="地獄模式"
+              >
+
+              <div class="choice-content">
+
+                <div class="choice-icon">
+                  😈
+                </div>
+
+                <strong>
+                  地獄模式
+                </strong>
+
+                <small>
+                  吐槽火力全開，
+                  心臟強一點再選
+                </small>
+
+              </div>
+
+            </label>
+
+
+          </div>
+
+        </div>
+
+
+        <!-- 時間 -->
+
+        <div class="time-grid">
+
+
+          <div class="field">
+
+            <label for="unlockTime">
+              遊戲解鎖時間
+              <span>*</span>
+            </label>
+
+            <input
+              id="unlockTime"
+              name="unlockTime"
+              type="time"
+              value="00:00"
+              required
+            >
+
+            <div class="help">
+              預設生日當天 00:00 開放。
+            </div>
+
+          </div>
+
+
+          <div class="field">
+
+            <label for="rescueTime">
+              人道救援時間
+              <span>*</span>
+            </label>
+
+            <input
+              id="rescueTime"
+              name="rescueTime"
+              type="time"
+              value="22:00"
+              required
+            >
+
+            <div class="help">
+              到達此時間仍未完成，
+              可以選擇直接公布禮物位置。
+            </div>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ===================================
+         STEP 02
+         =================================== -->
+
+    <section
+      class="form-step"
+      data-step="2"
+    >
+
+      <div class="section-heading">
+
+        <span class="section-number">
+          02
+        </span>
+
+        <div>
+
+          <h2 id="missionStepTitle">
+            設定 Mission
+          </h2>
+
+          <p>
+            每一關都會搭配一張實體 Mission Card。
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="missionsContainer"
+        class="missions"
+      ></div>
+
+    </section>
+
+
+
+    <!-- ===================================
+         STEP 03
+         =================================== -->
+
+    <section
+      class="form-step"
+      data-step="3"
+    >
+
+      <div class="section-heading">
+
+        <span class="section-number">
+          03
+        </span>
+
+        <div>
+
+          <h2>
+            最終生日禮物
+          </h2>
+
+          <p>
+            完成所有 Mission 後，
+            壽星才會看到這裡的內容。
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="form-card">
+
+
+        <div class="field">
+
+          <label for="giftLocation">
+            最終禮物位置
+            <span>*</span>
+          </label>
+
+          <textarea
+            id="giftLocation"
+            name="giftLocation"
+            rows="4"
+            maxlength="300"
+            placeholder="例如：衣櫃最上層的黑色袋子裡。"
+            required
+          ></textarea>
+
+          <div class="help">
+            此位置在正常破關或啟動人道救援前，
+            不會顯示給壽星。
+          </div>
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="completionBlessing">
+            破關祝福
+            <span>*</span>
+          </label>
+
+          <textarea
+            id="completionBlessing"
+            name="completionBlessing"
+            rows="6"
+            maxlength="800"
+            placeholder="例如：你真的找到啦 ❤️ 希望今天除了收到禮物，也多了一段值得記住的回憶。"
+            required
+          ></textarea>
+
+          <div class="help">
+            這段文字會在找到最終生日禮物時顯示。
+          </div>
+
+        </div>
+
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ===================================
+         STEP 04
+         =================================== -->
+
+    <section
+      class="form-step"
+      data-step="4"
+    >
+
+      <div class="section-heading">
+
+        <span class="section-number">
+          04
+        </span>
+
+        <div>
+
+          <h2>
+            永久電子生日卡
+          </h2>
+
+          <p>
+            遊戲完成後，
+            同一張 NFC 將永久變成這張生日卡。
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="form-card">
+
+
+        <div class="field">
+
+          <label for="cardTitle">
+            卡片標題
+            <span>*</span>
+          </label>
+
+          <input
+            id="cardTitle"
+            name="cardTitle"
+            type="text"
+            value="HAPPY BIRTHDAY"
+            maxlength="60"
+            required
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="cardSubtitle">
+            卡片副標題
+            <span>*</span>
+          </label>
+
+          <input
+            id="cardSubtitle"
+            name="cardSubtitle"
+            type="text"
+            placeholder="例如：給最特別的妳"
+            maxlength="80"
+            required
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="cardMessage">
+            生日祝福
+            <span>*</span>
+          </label>
+
+          <textarea
+            id="cardMessage"
+            name="cardMessage"
+            rows="8"
+            maxlength="1500"
+            placeholder="寫下一段想永久留給壽星的話……"
+            required
+          ></textarea>
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="cardSignature">
+            署名
+            <span>*</span>
+          </label>
+
+          <input
+            id="cardSignature"
+            name="cardSignature"
+            type="text"
+            placeholder="例如：FROM JAY"
+            maxlength="80"
+            required
+          >
+
+        </div>
+
+
+        <!-- PHOTO -->
+
+        <div class="field">
+
+          <label for="cardPhoto">
+            生日卡照片
+            <span>*</span>
+          </label>
+
+
+          <label
+            class="upload-box"
+            for="cardPhoto"
+          >
+
+            <input
+              id="cardPhoto"
+              name="cardPhoto"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              required
+            >
+
+
+            <div
+              id="uploadEmpty"
+              class="upload-empty"
+            >
+
+              <div class="upload-icon">
+                ＋
+              </div>
+
+              <strong>
+                選擇一張照片
+              </strong>
+
+              <span>
+                JPG / PNG / WEBP
+              </span>
+
+            </div>
+
+
+            <img
+              id="photoPreview"
+              class="photo-preview"
+              alt="生日卡照片預覽"
+              hidden
+            >
+
+          </label>
+
+
+          <div class="help">
+            建議使用清楚原始照片。
+            現階段先做預覽，
+            正式上傳會在 Phase 03-D 串接。
+          </div>
+
+        </div>
+
+
+        <!-- TEMPLATE -->
+
+        <div class="field">
+
+          <label>
+            生日卡模板
+            <span>*</span>
+          </label>
+
+
+          <div class="template-grid">
+
+
+            <label class="template-card">
+
+              <input
+                type="radio"
+                name="cardTemplate"
+                value="精品黑"
                 required
               >
 
               <div
-                id="uploadEmpty"
-                class="upload-empty"
+                class="template-preview template-dark"
               >
-
-                <div class="upload-icon">
-                  ＋
-                </div>
-
-                <strong>
-                  選擇一張照片
-                </strong>
-
+                HAPPY
                 <span>
-                  JPG / PNG / WEBP
+                  BIRTHDAY
                 </span>
-
               </div>
 
+              <strong>
+                精品黑
+              </strong>
 
-              <img
-                id="photoPreview"
-                class="photo-preview"
-                alt="生日卡照片預覽"
-                hidden
+            </label>
+
+
+            <label class="template-card">
+
+              <input
+                type="radio"
+                name="cardTemplate"
+                value="奶油白"
               >
 
+              <div
+                class="template-preview template-cream"
+              >
+                HAPPY
+                <span>
+                  BIRTHDAY
+                </span>
+              </div>
+
+              <strong>
+                奶油白
+              </strong>
+
             </label>
 
-            <div class="help">
-              建議使用清楚的原始照片。
-              此階段只做預覽，正式上傳會在 Phase 03-D 接上。
-            </div>
 
-          </div>
+            <label class="template-card">
 
+              <input
+                type="radio"
+                name="cardTemplate"
+                value="浪漫暖色"
+              >
 
-          <div class="field">
+              <div
+                class="template-preview template-warm"
+              >
+                HAPPY
+                <span>
+                  BIRTHDAY
+                </span>
+              </div>
 
-            <label>
-              生日卡模板
-              <span>*</span>
+              <strong>
+                浪漫暖色
+              </strong>
+
             </label>
 
-            <div class="template-grid">
-
-              <label class="template-card">
-
-                <input
-                  type="radio"
-                  name="cardTemplate"
-                  value="精品黑"
-                  required
-                >
-
-                <div class="template-preview template-dark">
-                  HAPPY
-                  <span>BIRTHDAY</span>
-                </div>
-
-                <strong>
-                  精品黑
-                </strong>
-
-              </label>
-
-
-              <label class="template-card">
-
-                <input
-                  type="radio"
-                  name="cardTemplate"
-                  value="奶油白"
-                >
-
-                <div class="template-preview template-cream">
-                  HAPPY
-                  <span>BIRTHDAY</span>
-                </div>
-
-                <strong>
-                  奶油白
-                </strong>
-
-              </label>
-
-
-              <label class="template-card">
-
-                <input
-                  type="radio"
-                  name="cardTemplate"
-                  value="浪漫暖色"
-                >
-
-                <div class="template-preview template-warm">
-                  HAPPY
-                  <span>BIRTHDAY</span>
-                </div>
-
-                <strong>
-                  浪漫暖色
-                </strong>
-
-              </label>
-
-            </div>
 
           </div>
 
         </div>
 
-      </section>
 
-    </form>
+      </div>
 
-
-    <div class="form-nav">
-
-      <button
-        id="backBtn"
-        class="secondary-btn"
-        type="button"
-      >
-        上一步
-      </button>
-
-      <button
-        id="nextBtn"
-        class="primary-btn"
-        type="button"
-      >
-        下一步
-      </button>
-
-    </div>
+    </section>
 
 
-    <div class="autosave-note">
-      ✓ 文字內容會自動暫存在此裝置
-    </div>
-
-  </main>
+  </form>
 
 
-  <div
-    id="toast"
-    class="toast"
-    role="status"
-    aria-live="polite"
-  ></div>
+  <!-- NAV -->
+
+  <div class="form-nav">
+
+    <button
+      id="backBtn"
+      class="secondary-btn"
+      type="button"
+    >
+      上一步
+    </button>
 
 
-  <script src="../assets/js/config.js"></script>
-  <script src="../assets/js/setup.js"></script>
+    <button
+      id="nextBtn"
+      class="primary-btn"
+      type="button"
+    >
+      下一步
+    </button>
+
+  </div>
+
+
+  <div class="autosave-note">
+    ✓ 文字內容會自動暫存在此裝置
+  </div>
+
+
+</main>
+
+
+<div
+  id="toast"
+  class="toast"
+  role="status"
+  aria-live="polite"
+></div>
+
+
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/setup.js"></script>
 
 </body>
+
 </html>
