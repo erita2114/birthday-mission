@@ -163,9 +163,27 @@ const rescueStatus =
   );
 
 
+const revealGiftBtn =
+  document.getElementById(
+    'revealGiftBtn'
+  );
+
+
+const previewRevealBtn =
+  document.getElementById(
+    'previewRevealBtn'
+  );
+
+
 const restartPreviewBtn =
   document.getElementById(
     'restartPreviewBtn'
+  );
+
+
+const previewGiftRestartBtn =
+  document.getElementById(
+    'previewGiftRestartBtn'
   );
 
 
@@ -288,7 +306,6 @@ function bindEvents() {
     'input',
     () => {
 
-
       missionCodeInput.value =
         missionCodeInput.value
           .replace(
@@ -330,13 +347,27 @@ function bindEvents() {
   );
 
 
+  revealGiftBtn.addEventListener(
+    'click',
+    handleRevealGift
+  );
+
+
+  previewRevealBtn.addEventListener(
+    'click',
+    handlePreviewRevealGift
+  );
+
+
   restartPreviewBtn.addEventListener(
     'click',
-    () => {
+    restartPreview
+  );
 
-      window.location.reload();
 
-    }
+  previewGiftRestartBtn.addEventListener(
+    'click',
+    restartPreview
   );
 
 }
@@ -500,9 +531,26 @@ async function loadFormalState() {
 
     case 'GIFT_REVEALED':
 
-      renderRescueSuccess(
-        result
-      );
+
+      if (
+        result.revealMethod ===
+        'RESCUE'
+      ) {
+
+        renderRescueSuccess(
+          result
+        );
+
+      }
+
+      else {
+
+        renderGiftReveal(
+          result
+        );
+
+      }
+
 
       return;
 
@@ -618,9 +666,7 @@ async function handleStart() {
 
 
   if (actionBusy) {
-
     return;
-
   }
 
 
@@ -715,7 +761,6 @@ async function handleStart() {
 
   finally {
 
-
     actionBusy =
       false;
 
@@ -800,13 +845,9 @@ async function handleHint() {
   if (!answer) {
 
     showFeedback(
-
       hintFeedback,
-
       '請先輸入答案。',
-
       false
-
     );
 
     return;
@@ -898,13 +939,9 @@ async function handleHint() {
 
 
       showFeedback(
-
         hintFeedback,
-
         '答案正確，提示已解鎖。',
-
         true
-
       );
 
 
@@ -913,14 +950,12 @@ async function handleHint() {
     }
 
 
-    const wrong =
+    if (
       result.status ===
         'HINT_WRONG' ||
       result.status ===
-        'PREVIEW_HINT_WRONG';
-
-
-    if (wrong) {
+        'PREVIEW_HINT_WRONG'
+    ) {
 
 
       showFeedback(
@@ -981,7 +1016,6 @@ async function handleHint() {
 
   finally {
 
-
     actionBusy =
       false;
 
@@ -1020,13 +1054,9 @@ async function handleUnlock() {
   ) {
 
     showFeedback(
-
       codeFeedback,
-
       '請輸入 Mission Card 上的 4 位數密碼。',
-
       false
-
     );
 
     return;
@@ -1081,38 +1111,11 @@ async function handleUnlock() {
       );
 
 
-    /* PREVIEW WRONG */
-
     if (
       result.status ===
-      'PREVIEW_CODE_WRONG'
-    ) {
-
-
-      showFeedback(
-
-        codeFeedback,
-
-        result.message ||
-        'Mission 密碼不正確。',
-
-        false
-
-      );
-
-
-      resetUnlockButton();
-
-      return;
-
-    }
-
-
-    /* FORMAL WRONG */
-
-    if (
+        'PREVIEW_CODE_WRONG' ||
       result.status ===
-      'CODE_WRONG'
+        'CODE_WRONG'
     ) {
 
 
@@ -1169,7 +1172,7 @@ async function handleUnlock() {
     }
 
 
-    /* PREVIEW END */
+    /* PREVIEW FINAL */
 
     if (
       result.status ===
@@ -1204,13 +1207,6 @@ async function handleUnlock() {
       );
 
 
-      /*
-       * 直接重新向後端取得 state。
-       * 這樣下一關的提示、
-       * Rescue 狀態都一定最新。
-       */
-
-
       await loadFormalState();
 
 
@@ -1219,7 +1215,7 @@ async function handleUnlock() {
     }
 
 
-    /* FORMAL END */
+    /* FORMAL FINAL */
 
     if (
       result.status ===
@@ -1262,6 +1258,182 @@ async function handleUnlock() {
 
   finally {
 
+    actionBusy =
+      false;
+
+  }
+
+}
+
+
+/* ======================================
+   NORMAL GIFT REVEAL
+   ====================================== */
+
+
+async function handleRevealGift() {
+
+
+  if (actionBusy) {
+    return;
+  }
+
+
+  actionBusy =
+    true;
+
+
+  revealGiftBtn.disabled =
+    true;
+
+
+  revealGiftBtn.textContent =
+    '正在揭曉生日禮物...';
+
+
+  try {
+
+
+    const result =
+      await callApi({
+
+        action:
+          'revealGift',
+
+        g:
+          gameId,
+
+      });
+
+
+    if (
+      result.status !==
+      'GIFT_REVEALED'
+    ) {
+
+      throw new Error(
+        '禮物揭曉狀態異常。'
+      );
+
+    }
+
+
+    renderGiftReveal(
+      result
+    );
+
+
+  }
+
+  catch (error) {
+
+
+    showToast(
+      error.message ||
+      '禮物揭曉失敗。'
+    );
+
+
+    revealGiftBtn.disabled =
+      false;
+
+
+    revealGiftBtn.textContent =
+      '揭曉我的生日禮物';
+
+  }
+
+  finally {
+
+    actionBusy =
+      false;
+
+  }
+
+}
+
+
+/* ======================================
+   PREVIEW GIFT REVEAL
+   ====================================== */
+
+
+async function handlePreviewRevealGift() {
+
+
+  if (actionBusy) {
+    return;
+  }
+
+
+  actionBusy =
+    true;
+
+
+  previewRevealBtn.disabled =
+    true;
+
+
+  previewRevealBtn.textContent =
+    '測試中...';
+
+
+  try {
+
+
+    const result =
+      await callApi({
+
+        action:
+          'previewRevealGift',
+
+        g:
+          gameId,
+
+        preview:
+          previewToken,
+
+      });
+
+
+    if (
+      result.status !==
+      'PREVIEW_GIFT_REVEAL_OK'
+    ) {
+
+      throw new Error(
+        'Preview 禮物揭曉測試異常。'
+      );
+
+    }
+
+
+    showScreen(
+      'previewGiftScreen'
+    );
+
+
+  }
+
+  catch (error) {
+
+
+    showToast(
+      error.message ||
+      '測試失敗。'
+    );
+
+
+    previewRevealBtn.disabled =
+      false;
+
+
+    previewRevealBtn.textContent =
+      '測試禮物揭曉';
+
+  }
+
+  finally {
 
     actionBusy =
       false;
@@ -1279,12 +1451,8 @@ async function handleUnlock() {
 async function handleRescue() {
 
 
-  if (
-    actionBusy
-  ) {
-
+  if (actionBusy) {
     return;
-
   }
 
 
@@ -1302,8 +1470,6 @@ async function handleRescue() {
 
   try {
 
-
-    /* PREVIEW */
 
     if (isPreview) {
 
@@ -1352,8 +1518,6 @@ async function handleRescue() {
 
     }
 
-
-    /* FORMAL */
 
     const result =
       await callApi({
@@ -1436,7 +1600,6 @@ async function handleRescue() {
 
   finally {
 
-
     actionBusy =
       false;
 
@@ -1471,9 +1634,7 @@ function renderReady(
     )
     .textContent =
       `${data.totalStage} MISSION${
-        Number(
-          data.totalStage
-        ) > 1
+        Number(data.totalStage) > 1
           ? 'S'
           : ''
       }`;
@@ -1536,20 +1697,18 @@ function renderMission(
   };
 
 
-  const padded =
-    String(stage)
-      .padStart(
-        2,
-        '0'
-      );
-
-
   document
     .getElementById(
       'missionTitle'
     )
     .textContent =
-      `MISSION ${padded}`;
+      `MISSION ${
+        String(stage)
+          .padStart(
+            2,
+            '0'
+          )
+      }`;
 
 
   document
@@ -1616,7 +1775,7 @@ function renderMission(
 
 
 /* ======================================
-   RESET MISSION UI
+   RESET MISSION
    ====================================== */
 
 
@@ -1904,21 +2063,10 @@ function startRescueTimer(
         totalMinutes % 60;
 
 
-      if (
+      rescueStatus.textContent =
         hours > 0
-      ) {
-
-        rescueStatus.textContent =
-          `約 ${hours} 小時 ${minutes} 分鐘後開放`;
-
-      }
-
-      else {
-
-        rescueStatus.textContent =
-          `約 ${minutes} 分鐘後開放`;
-
-      }
+          ? `約 ${hours} 小時 ${minutes} 分鐘後開放`
+          : `約 ${minutes} 分鐘後開放`;
 
     };
 
@@ -1952,6 +2100,14 @@ function renderAllComplete() {
     null;
 
 
+  revealGiftBtn.disabled =
+    false;
+
+
+  revealGiftBtn.textContent =
+    '揭曉我的生日禮物';
+
+
   showScreen(
     'allCompleteScreen'
   );
@@ -1971,8 +2127,56 @@ function renderPreviewComplete() {
     null;
 
 
+  previewRevealBtn.disabled =
+    false;
+
+
+  previewRevealBtn.textContent =
+    '測試禮物揭曉';
+
+
   showScreen(
     'previewCompleteScreen'
+  );
+
+}
+
+
+/* ======================================
+   NORMAL GIFT
+   ====================================== */
+
+
+function renderGiftReveal(
+  data
+) {
+
+
+  clearInterval(
+    rescueTimer
+  );
+
+
+  document
+    .getElementById(
+      'giftLocation'
+    )
+    .textContent =
+      data.giftLocation ||
+      '—';
+
+
+  document
+    .getElementById(
+      'giftBlessing'
+    )
+    .textContent =
+      data.completionBlessing ||
+      '';
+
+
+  showScreen(
+    'giftRevealScreen'
   );
 
 }
@@ -2014,6 +2218,18 @@ function renderRescueSuccess(
   showScreen(
     'rescueSuccessScreen'
   );
+
+}
+
+
+/* ======================================
+   PREVIEW RESTART
+   ====================================== */
+
+
+function restartPreview() {
+
+  window.location.reload();
 
 }
 
@@ -2193,7 +2409,7 @@ function setCountdown(
 
 
 /* ======================================
-   BUTTON RESET
+   RESET CODE BUTTON
    ====================================== */
 
 
