@@ -538,7 +538,11 @@ function renderBirthdayCard(data, preview) {
   document.getElementById('cardMessage').textContent = card.message || '';
   document.getElementById('cardSignature').textContent = card.signature || '';
 
-  loadBirthdayCardPhoto_(photo, photoWrap, card.photoUrl);
+  loadBirthdayCardPhoto_(
+    photo,
+    photoWrap,
+    card.photoDataUrl || card.photoUrl
+  );
 
   const heading = document.getElementById('permanentCardHeading');
   const text = document.getElementById('permanentCardText');
