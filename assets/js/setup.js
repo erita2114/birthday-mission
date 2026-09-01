@@ -2725,3 +2725,632 @@ function setCreateLoading(
       : '確認建立 Birthday Mission';
 
 }
+
+async function preparePhotoForUpload(
+  file
+) {
+
+
+  if (!file) {
+
+    throw new Error(
+      '找不到生日卡照片'
+    );
+
+  }
+
+
+  const image =
+    await loadImageFile(
+      file
+    );
+
+
+  let width =
+    image.naturalWidth;
+
+
+  let height =
+    image.naturalHeight;
+
+
+  const maxDimension =
+    1600;
+
+
+  if (
+    Math.max(
+      width,
+      height
+    ) >
+    maxDimension
+  ) {
+
+
+    const ratio =
+      maxDimension /
+      Math.max(
+        width,
+        height
+      );
+
+
+    width =
+      Math.round(
+        width * ratio
+      );
+
+
+    height =
+      Math.round(
+        height * ratio
+      );
+
+  }
+
+
+  let quality =
+    0.84;
+
+
+  let blob =
+    null;
+
+
+  /*
+   * 最多嘗試 6 次。
+   */
+
+
+  for (
+    let attempt = 0;
+    attempt < 6;
+    attempt++
+  ) {
+
+
+    const canvas =
+      document.createElement(
+        'canvas'
+      );
+
+
+    canvas.width =
+      width;
+
+
+    canvas.height =
+      height;
+
+
+    const ctx =
+      canvas.getContext(
+        '2d'
+      );
+
+
+    /*
+     * PNG 透明背景轉 JPEG 時
+     * 避免變黑底。
+     */
+
+
+    ctx.fillStyle =
+      '#ffffff';
+
+
+    ctx.fillRect(
+      0,
+      0,
+      width,
+      height
+    );
+
+
+    ctx.drawImage(
+
+      image,
+
+      0,
+      0,
+
+      width,
+      height
+
+    );
+
+
+    blob =
+      await canvasToBlob(
+
+        canvas,
+
+        'image/jpeg',
+
+        quality
+
+      );
+
+
+    /*
+     * 目標控制在 1.5MB 內
+     */
+
+
+    if (
+      blob.size <=
+      1.5 * 1024 * 1024
+    ) {
+
+      break;
+
+    }
+
+
+    width =
+      Math.round(
+        width * 0.82
+      );
+
+
+    height =
+      Math.round(
+        height * 0.82
+      );
+
+
+    quality =
+      Math.max(
+        0.60,
+        quality - 0.05
+      );
+
+  }
+
+
+  if (!blob) {
+
+    throw new Error(
+      '照片壓縮失敗'
+    );
+
+  }
+
+
+  if (
+    blob.size >
+    1.8 * 1024 * 1024
+  ) {
+
+    throw new Error(
+      '照片仍然過大，請更換照片'
+    );
+
+  }
+
+
+  const dataBase64 =
+    await blobToBase64(
+      blob
+    );
+
+
+  return {
+
+    name:
+      file.name,
+
+    mimeType:
+      'image/jpeg',
+
+    dataBase64,
+
+  };
+
+}
+
+
+/* ======================================
+ * LOAD IMAGE
+ * ====================================== */
+
+
+function loadImageFile(
+  file
+) {
+
+
+  return new Promise(
+    (
+      resolve,
+      reject
+    ) => {
+
+
+      const objectUrl =
+        URL.createObjectURL(
+          file
+        );
+
+
+      const image =
+        new Image();
+
+
+      image.onload =
+        () => {
+
+
+          URL.revokeObjectURL(
+            objectUrl
+          );
+
+
+          resolve(
+            image
+          );
+
+        };
+
+
+      image.onerror =
+        () => {
+
+
+          URL.revokeObjectURL(
+            objectUrl
+          );
+
+
+          reject(
+            new Error(
+              '照片讀取失敗'
+            )
+          );
+
+        };
+
+
+      image.src =
+        objectUrl;
+
+    }
+  );
+
+}
+
+
+/* ======================================
+ * CANVAS → BLOB
+ * ====================================== */
+
+
+function canvasToBlob(
+  canvas,
+  type,
+  quality
+) {
+
+
+  return new Promise(
+    (
+      resolve,
+      reject
+    ) => {
+
+
+      canvas.toBlob(
+
+        blob => {
+
+
+          if (!blob) {
+
+            reject(
+              new Error(
+                '照片壓縮失敗'
+              )
+            );
+
+
+            return;
+
+          }
+
+
+          resolve(
+            blob
+          );
+
+        },
+
+        type,
+
+        quality
+
+      );
+
+    }
+  );
+
+}
+
+
+/* ======================================
+ * BLOB → BASE64
+ * ====================================== */
+
+
+function blobToBase64(
+  blob
+) {
+
+
+  return new Promise(
+    (
+      resolve,
+      reject
+    ) => {
+
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        () => {
+
+
+          const result =
+            String(
+              reader.result || ''
+            );
+
+
+          const comma =
+            result.indexOf(
+              ','
+            );
+
+
+          if (
+            comma === -1
+          ) {
+
+
+            reject(
+              new Error(
+                '照片編碼失敗'
+              )
+            );
+
+
+            return;
+
+          }
+
+
+          resolve(
+            result.slice(
+              comma + 1
+            )
+          );
+
+        };
+
+
+      reader.onerror =
+        () =>
+          reject(
+            new Error(
+              '照片編碼失敗'
+            )
+          );
+
+
+      reader.readAsDataURL(
+        blob
+      );
+
+    }
+  );
+
+}
+
+function showCreationSuccess(
+  result
+) {
+
+
+  confirmationPage.hidden =
+    true;
+
+
+  creationSuccessPage.hidden =
+    false;
+
+
+  successGameId.textContent =
+    result.gameId;
+
+
+  successGameUrl.textContent =
+    result.gameUrl;
+
+
+  successGameUrl.href =
+    result.gameUrl;
+
+
+  successMissionCards.innerHTML =
+    '';
+
+
+  const missionCards =
+    Array.isArray(
+      result.missionCards
+    )
+      ? result.missionCards
+      : [];
+
+
+  missionCards.forEach(
+    mission => {
+
+
+      const stage =
+        Number(
+          mission.stage
+        );
+
+
+      const padded =
+        String(stage)
+          .padStart(
+            2,
+            '0'
+          );
+
+
+      const card =
+        document.createElement(
+          'article'
+        );
+
+
+      card.className =
+        'success-mission';
+
+
+      card.innerHTML = `
+
+        <div class="success-mission-head">
+
+          <div class="success-mission-name">
+            MISSION ${padded}
+          </div>
+
+          <div class="success-code">
+            ${escapeHtml(
+              mission.code
+            )}
+          </div>
+
+        </div>
+
+
+        <div class="success-location">
+
+          <span>
+            實體卡藏匿位置
+          </span>
+
+          <strong>
+            ${escapeHtml(
+              mission.hideLocation
+            )}
+          </strong>
+
+        </div>
+
+      `;
+
+
+      successMissionCards
+        .appendChild(
+          card
+        );
+
+    }
+  );
+
+
+  scrollToTop();
+
+
+  isSubmitting =
+    false;
+
+}
+
+
+/* ======================================
+ * COPY GAME URL
+ * ====================================== */
+
+
+async function copySuccessGameUrl() {
+
+
+  const url =
+    successGameUrl.textContent;
+
+
+  if (!url) {
+
+    return;
+
+  }
+
+
+  try {
+
+
+    await navigator.clipboard
+      .writeText(
+        url
+      );
+
+
+    showToast(
+      'NFC 專屬網址已複製'
+    );
+
+
+  }
+
+  catch (error) {
+
+
+    const textarea =
+      document.createElement(
+        'textarea'
+      );
+
+
+    textarea.value =
+      url;
+
+
+    textarea.style.position =
+      'fixed';
+
+
+    textarea.style.opacity =
+      '0';
+
+
+    document.body
+      .appendChild(
+        textarea
+      );
+
+
+    textarea.select();
+
+
+    document.execCommand(
+      'copy'
+    );
+
+
+    textarea.remove();
+
+
+    showToast(
+      'NFC 專屬網址已複製'
+    );
+
+  }
+
+}
